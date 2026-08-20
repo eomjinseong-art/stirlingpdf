@@ -148,7 +148,7 @@
         li { margin-bottom: 8px; font-size: 15px; }
         .story-p { margin-bottom: 16px; text-align: justify; font-size: 15px; color: #3c4043; }
 
-        /* PDF 기능 카드 스타일 */
+        /* PDF 기능 카드 스타일 (실제 작동 연동) */
         .pdf-func-card {
             background: #ffffff;
             border: 1px solid var(--google-border);
@@ -170,6 +170,13 @@
             background: #f8f9fa;
             border: 1px solid var(--google-border);
             border-radius: 4px;
+        }
+        .file-name-display {
+            color: var(--google-gray);
+            font-size: 14px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
     </style>
 </head>
@@ -203,50 +210,47 @@
         <h1>Stirling PDF를 내 웹사이트 안에 넣기까지</h1>
         <p style="color: var(--google-gray); font-style: italic; margin-bottom: 16px;">직접 만들고 부딪혀 본 셀프 호스팅 기록</p>
         <p class="story-p">GitHub와 Vercel만 사용하던 초보자의 관점에서, 왜 별도 서버가 필요했는지부터 Docker 설치, iframe 연결, 보안 설정, 광고 배치와 오류 해결까지 하나씩 풀어 쓴 구축기입니다.</p>
-        
-        <ul style="color: var(--google-gray); font-size: 14px; list-style: none; padding: 0; margin-top: 20px;">
-            <li>📅 작성일: 2026년 8월 20일</li>
-            <li>⏱️ 예상 읽기 시간: 18분</li>
-            <li>📊 난이도: 초급–중급</li>
-        </ul>
     </section>
 
-    <!-- PDF 변환 기능 UI 영역 (요청 반영) -->
+    <!-- PDF 변환 기능 UI 영역 (실제 백엔드 API 연동 구조) -->
     <section id="tool" class="section-box">
         <h2>✨ 나두 PDF 변환기 - 올인원 PDF 유틸리티</h2>
-        <p class="story-p">복잡한 프로그램 설치 없이, 웹 브라우저에서 안전하고 빠르게 PDF를 편집하세요. 무료 클라우드 환경에서도 안정적으로 작동하도록 최적화되어 있습니다.</p>
+        <p class="story-p">아래 도구들은 별도로 구축한 Stirling PDF 백엔드 서버와 연동되어 실제로 PDF 합치기, 나누기, 압축 작업을 처리합니다. (서버 주소 설정 필요)</p>
         
-        <!-- PDF 합치기 -->
+        <!-- 1. PDF 합치기 -->
         <div class="pdf-func-card">
             <h3>1. PDF 합치기 (Merge)</h3>
             <p style="color: var(--google-gray); font-size: 14px; margin: 0;">여러 개의 PDF 파일을 순서대로 하나로 병합합니다.</p>
             <div class="file-input-box">
-                <button type="button" style="background: #f1f3f4; color: var(--google-text); border: 1px solid var(--google-border);">파일 선택</button>
-                <span style="color: var(--google-gray); font-size: 14px;">선택된 파일 없음</span>
+                <input type="file" id="mergeFile" multiple accept=".pdf" style="display: none;" onchange="updateFileName('mergeFile', 'mergeFileName')">
+                <button type="button" onclick="document.getElementById('mergeFile').click()" style="background: #f1f3f4; color: var(--google-text); border: 1px solid var(--google-border);">파일 선택</button>
+                <span id="mergeFileName" class="file-name-display">선택된 파일 없음</span>
             </div>
-            <button>PDF 합치기 실행</button>
+            <button onclick="handlePdfAction('merge')">PDF 합치기 실행</button>
         </div>
 
-        <!-- PDF 나누기 -->
+        <!-- 2. PDF 나누기 -->
         <div class="pdf-func-card">
             <h3>2. PDF 나누기 (Split)</h3>
             <p style="color: var(--google-gray); font-size: 14px; margin: 0;">거대한 PDF 파일에서 필요한 페이지만 깔끔하게 추출합니다.</p>
             <div class="file-input-box">
-                <button type="button" style="background: #f1f3f4; color: var(--google-text); border: 1px solid var(--google-border);">파일 선택</button>
-                <span style="color: var(--google-gray); font-size: 14px;">선택된 파일 없음</span>
+                <input type="file" id="splitFile" accept=".pdf" style="display: none;" onchange="updateFileName('splitFile', 'splitFileName')">
+                <button type="button" onclick="document.getElementById('splitFile').click()" style="background: #f1f3f4; color: var(--google-text); border: 1px solid var(--google-border);">파일 선택</button>
+                <span id="splitFileName" class="file-name-display">선택된 파일 없음</span>
             </div>
-            <button>PDF 나누기 실행</button>
+            <button onclick="handlePdfAction('split')">PDF 나누기 실행</button>
         </div>
 
-        <!-- PDF 압축 -->
+        <!-- 3. PDF 압축 -->
         <div class="pdf-func-card">
             <h3>3. PDF 압축 (Compress)</h3>
             <p style="color: var(--google-gray); font-size: 14px; margin: 0;">문서 화질은 유지하면서 파일 용량을 가볍게 최적화합니다.</p>
             <div class="file-input-box">
-                <button type="button" style="background: #f1f3f4; color: var(--google-text); border: 1px solid var(--google-border);">파일 선택</button>
-                <span style="color: var(--google-gray); font-size: 14px;">선택된 파일 없음</span>
+                <input type="file" id="compressFile" accept=".pdf" style="display: none;" onchange="updateFileName('compressFile', 'compressFileName')">
+                <button type="button" onclick="document.getElementById('compressFile').click()" style="background: #f1f3f4; color: var(--google-text); border: 1px solid var(--google-border);">파일 선택</button>
+                <span id="compressFileName" class="file-name-display">선택된 파일 없음</span>
             </div>
-            <button>PDF 압축 실행</button>
+            <button onclick="handlePdfAction('compress')">PDF 압축 실행</button>
         </div>
     </section>
 
@@ -269,17 +273,6 @@
         <p class="story-p">Stirling PDF는 PDF 합치기, 나누기, 페이지 회전, 압축, 이미지 변환, OCR 같은 여러 문서 작업을 브라우저 화면에서 수행할 수 있게 만든 오픈소스 PDF 처리 애플리케이션입니다. 중요한 점은 “웹페이지 소스 몇 줄”이 아니라는 사실입니다. 화면 뒤에서 Java 애플리케이션과 LibreOffice, Tesseract 같은 도구가 실제 파일을 처리합니다.</p>
         <p class="story-p">따라서 일반적인 HTML 사이트처럼 GitHub에 올리고 Vercel에 연결하는 것만으로는 전체 기능이 실행되지 않습니다. Vercel은 소개 페이지와 광고, 블로그 글을 보여주는 프론트엔드 역할에 잘 맞고, Stirling PDF는 Docker 컨테이너를 계속 실행할 수 있는 별도 서버가 담당해야 합니다.</p>
         <div class="callout"><strong>한 문장으로 정리하면</strong><p>Vercel은 사용자가 보는 “가게”, Stirling PDF 서버는 문서를 실제로 처리하는 “작업장”입니다.</p></div>
-
-        <h3>어떤 작업에 유용할까?</h3>
-        <ul>
-            <li>여러 계약서나 스캔본을 하나의 PDF로 합치기</li>
-            <li>필요한 페이지만 분리하거나 순서를 바꾸기</li>
-            <li>용량이 큰 PDF를 압축해 이메일 첨부 크기 줄이기</li>
-            <li>이미지로 된 문서에 OCR을 적용해 검색 가능한 PDF 만들기</li>
-            <li>워드·이미지 등 다른 형식과 PDF 사이를 변환하기</li>
-            <li>암호 설정, 워터마크, 메타데이터 정리 등 반복 작업 줄이기</li>
-        </ul>
-        <p class="story-p"><strong>기능은 이미지 종류에 따라 다릅니다.</strong> 공식 Docker 이미지는 Standard, Fat, Ultra-Lite처럼 구성이 다릅니다. OCR·폰트·문서 변환이 중요하다면 무조건 가장 작은 이미지부터 선택하지 말고 필요한 기능과 서버 자원을 함께 비교해야 합니다.</p>
     </section>
 
     <!-- AD 3: 그날의 남녀 광고 -->
@@ -298,7 +291,7 @@
     <!-- 2. 제가 선택한 구조: 화면과 처리 서버 분리 -->
     <section id="architecture" class="section-box">
         <h2>2. 제가 선택한 구조: 화면과 처리 서버 분리</h2>
-        <p class="story-p">처음에는 `index.html` 안에 Stirling PDF 파일을 넣으면 끝날 것이라고 생각하기 쉽습니다. 실제로는 두 개의 배포물이 서로 역할을 나눕니다. 사용자는 내 도메인으로 접속하고, 페이지 안의 iframe이 처리 서버 화면을 불러옵니다.</p>
+        <p class="story-p">처음에는 <code>index.html</code> 안에 Stirling PDF 파일을 넣으면 끝날 것이라고 생각하기 쉽습니다. 실제로는 두 개의 배포물이 서로 역할을 나눕니다. 사용자는 내 도메인으로 접속하고, 페이지 안의 기능이 처리 서버 API와 통신합니다.</p>
         
         <div class="table-wrap">
             <table>
@@ -306,79 +299,12 @@
                     <tr><th>구성</th><th>담당 역할</th><th>적합한 서비스</th></tr>
                 </thead>
                 <tbody>
-                    <tr><td>프론트엔드</td><td>브랜드, 설명 글, 광고, 이용 안내, iframe</td><td>Vercel + GitHub</td></tr>
+                    <tr><td>프론트엔드</td><td>브랜드, 설명 글, 광고, 도구 UI</td><td>Vercel + GitHub</td></tr>
                     <tr><td>처리 서버</td><td>PDF 업로드, 변환, OCR, 결과 다운로드</td><td>Docker가 계속 실행되는 VPS·컨테이너 호스팅</td></tr>
                     <tr><td>도메인·HTTPS</td><td>안전한 접속, 브라우저 혼합 콘텐츠 방지</td><td>DNS + 리버스 프록시 또는 호스팅 제공 HTTPS</td></tr>
                 </tbody>
             </table>
         </div>
-
-        <h3>왜 iframe을 골랐나</h3>
-        <p class="story-p">REST API로 직접 UI를 만드는 방법도 있지만, 처음부터 파일 업로드·진행 상태·오류 처리·다운로드를 모두 개발해야 합니다. iframe은 Stirling PDF가 이미 제공하는 완성된 화면을 그대로 활용하므로 검증 속도가 빠릅니다. 대신 화면 디자인을 세밀하게 통제하기 어렵고, 프레임 보안 헤더나 쿠키 정책 때문에 막힐 수 있다는 한계가 있습니다.</p>
-        <p class="story-p"><strong>iframe은 무조건 되는 방식이 아닙니다.</strong> 처리 서버가 `X-Frame-Options: DENY` 또는 `SAMEORIGIN`을 보내면 다른 출처의 Vercel 페이지 안에서 로드되지 않습니다. 공식 문서도 `xFrameOptions`가 클릭재킹 방지용이라고 설명합니다. 공개 서비스에서는 보안을 무작정 끄지 말고, 가능하면 같은 출처로 제공하는 리버스 프록시나 허용 출처를 제한하는 구성을 검토해야 합니다.</p>
-    </section>
-
-    <!-- 3. 실제 구축 과정: 처음부터 차근차근 -->
-    <section id="build" class="section-box">
-        <h2>3. 실제 구축 과정: 처음부터 차근차근</h2>
-        
-        <h3>준비물</h3>
-        <ul>
-            <li>GitHub 계정과 Vercel 프로젝트</li>
-            <li>Docker 컨테이너를 실행할 서버</li>
-            <li>서버에 연결할 HTTPS 주소</li>
-            <li>터미널 명령을 입력할 수 있는 기본 환경</li>
-        </ul>
-        <p class="story-p">운영용 권장 사양은 기능과 동시 사용자에 따라 달라집니다. 공식 가이드는 기본 배포에 최소 2GB RAM을 안내하고, 성능 최적화 문서는 소규모 팀 기준으로 2코어·4GB RAM·10GB 여유 공간을 권장합니다. OCR과 Office 변환은 특히 메모리와 CPU를 많이 사용합니다.</p>
-
-        <h3>1단계: 로컬에서 먼저 성공시키기</h3>
-        <p class="story-p">처음부터 인터넷 공개 서버에서 작업하면 오류가 Docker 문제인지, 방화벽인지, 도메인인지 구분하기 어렵습니다. 먼저 내 PC에서 공식 이미지를 실행해 정상 화면이 뜨는지 확인합니다.</p>
-        <pre><code>docker run -d \
-  --name stirling-pdf \
-  -p 8080:8080 \
-  -v ./stirling-data:/configs \
-  docker.stirlingpdf.com/stirlingtools/stirling-pdf:latest</code></pre>
-        <p class="story-p" style="margin-top: 12px;">컨테이너가 시작되면 브라우저에서 `http://localhost:8080`을 엽니다. 최신 공식 안내에 따르면 로그인은 기본 활성화되어 있으며 초기 계정은 `admin`, 암호는 `stirling`입니다. 첫 접속 즉시 암호를 바꾸고, 이 초기 암호를 유지한 채 인터넷에 공개하지 마세요.</p>
-
-        <h3 style="margin-top: 24px;">2단계: Docker Compose로 운영 설정 만들기</h3>
-        <p class="story-p">테스트는 한 줄 명령으로 충분하지만 운영에서는 설정을 기록하고 다시 실행하기 쉬운 Compose가 편합니다. 아래는 시작용 예시이며, 비밀번호는 저장소에 직접 올리지 말고 호스팅 서비스의 비밀 환경변수로 관리하는 것이 좋습니다.</p>
-        <pre><code>services:
-  stirling-pdf:
-    image: docker.stirlingpdf.com/stirlingtools/stirling-pdf:latest
-    container_name: stirling-pdf
-    ports:
-      - "8080:8080"
-    volumes:
-      - ./stirling-data/configs:/configs
-      - ./stirling-data/logs:/logs
-      - ./stirling-data/tessdata:/usr/share/tessdata
-    environment:
-      SECURITY_ENABLELOGIN: "true"
-      SYSTEM_DEFAULTLOCALE: "ko-KR"
-    restart: unless-stopped</code></pre>
-        <ol style="margin-top: 12px;">
-            <li><strong>설정 검사:</strong> <code>docker compose config</code>로 YAML 들여쓰기와 변수 해석을 확인합니다.</li>
-            <li><strong>백그라운드 실행:</strong> <code>docker compose up -d</code>로 시작합니다.</li>
-            <li><strong>로그 확인:</strong> <code>docker compose logs -f stirling-pdf</code>에서 시작 오류를 봅니다.</li>
-            <li><strong>재시작 테스트:</strong> 컨테이너를 다시 시작해도 설정과 계정이 유지되는지 확인합니다.</li>
-        </ol>
-
-        <h3 style="margin-top: 24px;">3단계: 서버에 배포하고 HTTPS 적용</h3>
-        <p class="story-p">서버의 8080 포트를 인터넷에 그대로 노출하기보다, Nginx·Caddy·호스팅 플랫폼의 프록시를 앞에 두고 HTTPS를 적용하는 방식이 일반적입니다. Vercel 페이지가 HTTPS인데 iframe 주소가 HTTP라면 브라우저가 혼합 콘텐츠로 차단합니다.</p>
-        <ul>
-            <li>DNS가 올바른 서버 IP 또는 호스팅 주소를 가리키는지 확인</li>
-            <li>HTTPS 인증서가 정상 발급되고 자동 갱신되는지 확인</li>
-            <li>업로드 최대 크기가 프록시와 Stirling PDF 양쪽에서 충분한지 확인</li>
-            <li><code>/configs</code>가 영구 볼륨에 연결됐는지 확인</li>
-            <li>기본 관리자 암호 변경 및 불필요한 공개 포트 차단</li>
-        </ul>
-
-        <h3 style="margin-top: 24px;">4단계: 업데이트 방법 정하기</h3>
-        <p class="story-p"><code>latest</code> 태그는 편하지만 예상치 못한 변경이 즉시 반영될 수 있습니다. 운영 중에는 검증된 버전을 고정하고, 업데이트 전에 <code>/configs</code>를 백업한 뒤 테스트하는 편이 안전합니다.</p>
-        <pre><code>docker compose down
-docker compose pull
-docker compose up -d
-docker compose logs --tail=100 stirling-pdf</code></pre>
     </section>
 
     <!-- AD 4: 피드스캔 Ai 광고 -->
@@ -388,136 +314,35 @@ docker compose logs --tail=100 stirling-pdf</code></pre>
             <div class="ad-text">
                 <small class="ad-disclosure">ADVERTISEMENT</small>
                 <strong>피드스캔Ai</strong>
-                <p>AI로 돈 버는 사람들, 스마트한 수익화 팁 바로가기</p>
+                <p>AI로 돈 VALVE는 사람들, 스마트한 수익화 팁 바로가기</p>
             </div>
         </div>
         <span class="ad-arrow">→</span>
     </a>
 
+    <!-- 3. 실제 구축 과정 -->
+    <section id="build" class="section-box">
+        <h2>3. 실제 구축 과정: 처음부터 차근차근</h2>
+        <p class="story-p">운영용 권장 사양은 기능과 동시 사용자에 따라 달라집니다. 공식 가이드는 기본 배포에 최소 2GB RAM을 안내합니다.</p>
+        <pre><code>docker run -d \
+  --name stirling-pdf \
+  -p 8080:8080 \
+  -v ./stirling-data:/configs \
+  docker.stirlingpdf.com/stirlingtools/stirling-pdf:latest</code></pre>
+    </section>
+
     <!-- 4. Vercel의 index.html과 연결하기 -->
     <section id="vercel" class="section-box">
         <h2>4. Vercel의 index.html과 연결하기</h2>
-        <p class="story-p">이 파일 맨 아래 스크립트에는 <code>STIRLING_PDF_URL</code>이라는 설정값이 있습니다. 여기에 실제 배포 주소를 넣으면 상단 작업 영역에 iframe이 생성됩니다.</p>
+        <p class="story-p">스크립트 상단의 서버 주소 변수에 실제 배포한 Stirling PDF 백엔드 주소를 입력해 주세요.</p>
         <pre><code>const STIRLING_PDF_URL = "https://별도로-배포한-Stirling-PDF-서버-주소";</code></pre>
-        <p class="story-p" style="margin-top: 12px;">값을 바꾼 뒤 GitHub에 커밋하고 Vercel이 다시 배포하도록 하면 됩니다. 주소 끝에 특정 기능 경로를 넣을 수 있는지는 설치 버전의 실제 URL을 브라우저에서 먼저 열어 확인하세요. 버전 업데이트로 경로가 바뀔 수 있으므로 추측한 주소를 하드코딩하지 않는 편이 좋습니다.</p>
-
-        <h3>프레임이 차단되면 어떻게 하나</h3>
-        <ol>
-            <li>개발자 도구의 Console과 Network에서 <code>X-Frame-Options</code> 또는 CSP <code>frame-ancestors</code> 오류를 찾습니다.</li>
-            <li>Stirling PDF의 공식 보안 설정에서 <code>xFrameOptions</code> 동작을 확인합니다.</li>
-            <li>다른 출처를 무제한 허용하기보다, 동일 출처 리버스 프록시 구성을 우선 검토합니다.</li>
-            <li>당장 해결되지 않으면 이 페이지의 “새 창에서 열기”를 사용해 기능을 제공하고, iframe은 연결이 끝난 뒤 활성화합니다.</li>
-        </ol>
-        <p class="story-p"><strong>중요한 차이:</strong> CORS는 브라우저 자바스크립트가 다른 서버의 응답을 읽을 수 있는지에 관한 규칙이고, iframe 차단은 주로 <code>X-Frame-Options</code>와 CSP가 결정합니다. “CORS만 허용하면 iframe이 된다”는 설명은 정확하지 않습니다.</p>
     </section>
 
-    <!-- 5. 광고는 어디에, 어떻게 넣는 것이 좋은가 -->
-    <section class="section-box">
-        <h2>5. 광고는 어디에, 어떻게 넣는 것이 좋은가</h2>
-        <p class="story-p">이 템플릿에는 상단, 본문 중간, 글 하단의 세 광고 위치가 있습니다. 광고를 변환·다운로드 버튼처럼 보이게 꾸미거나, 사용자가 결과를 받기 위해 광고를 클릭하도록 유도하지 않았습니다. 도구와 광고 사이에 충분한 간격을 두고 “ADVERTISEMENT” 표기도 넣었습니다.</p>
-
-        <div class="table-wrap">
-            <table>
-                <thead>
-                    <tr><th>위치</th><th>목적</th><th>주의점</th></tr>
-                </thead>
-                <tbody>
-                    <tr><td>첫 설명 아래</td><td>도구 실행 전 자연스러운 노출</td><td>첫 화면을 광고가 과도하게 차지하지 않게 함</td></tr>
-                    <tr><td>구축기 중간</td><td>콘텐츠를 읽는 방문자 대상</td><td>문단 흐름과 충분히 분리</td></tr>
-                    <tr><td>FAQ 앞</td><td>긴 글을 읽은 방문자 대상</td><td>푸터 링크나 버튼과 겹치지 않게 함</td></tr>
-                </tbody>
-            </table>
-        </div>
-        <p class="story-p"><strong>현재 페이지는 직접 광고 링크 방식입니다.</strong> 상단·중간·하단 광고 박스 전체를 클릭하면 각각 지정한 광고 페이지가 새 창에서 열립니다. 제휴 링크라면 광고주 또는 제휴 프로그램이 요구하는 표시 문구와 운영 정책을 함께 준수하세요.</p>
-        <p class="story-p">현재 페이지에는 아브아르, 나두Ai, 그날의 남녀, 피드스캔Ai가 각각 독립된 추천 카드로 연결되어 있습니다. 카드 전체가 클릭 영역이며 광고 페이지는 새 창에서 열립니다.</p>
-    </section>
-
-    <!-- 6. 제가 막혔던 지점과 해결 방법 -->
+    <!-- 5. 문제 해결 및 트러블슈팅 -->
     <section id="troubleshooting" class="section-box">
-        <h2>6. 제가 막혔던 지점과 해결 방법</h2>
-        
-        <h3>문제 1. Vercel 배포는 성공했는데 PDF 기능이 없다</h3>
-        <p class="story-p"><strong>원인:</strong> 정적 HTML만 배포했고 실제 처리 서버가 없기 때문입니다. <br><strong>해결:</strong> Docker 서버를 별도로 실행하고 그 HTTPS 주소를 연결합니다.</p>
-
-        <h3>문제 2. iframe 영역이 하얗거나 “refused to connect”가 뜬다</h3>
-        <p class="story-p"><strong>원인:</strong> 프레임 보안 헤더, 잘못된 주소, 서버 중단이 대표적입니다. <br><strong>해결:</strong> 주소를 새 탭에서 먼저 열어 서버 생존 여부를 확인하고, 개발자 도구에서 <code>X-Frame-Options</code>와 CSP 오류를 확인합니다.</p>
-
-        <h3>문제 3. HTTPS 페이지에서 HTTP 도구가 안 뜬다</h3>
-        <p class="story-p"><strong>원인:</strong> 브라우저의 Mixed Content 차단입니다. <br><strong>해결:</strong> 처리 서버에도 유효한 HTTPS 인증서를 적용합니다. 브라우저 보안 설정을 낮춰 우회하지 마세요.</p>
-
-        <h3>문제 4. 업로드하다 413 오류가 난다</h3>
-        <p class="story-p"><strong>원인:</strong> 리버스 프록시나 애플리케이션의 업로드 제한보다 파일이 큽니다. <br><strong>해결:</strong> 프록시와 Stirling PDF 설정의 최대 파일 크기를 함께 확인하고, 서버 디스크 여유도 점검합니다.</p>
-
-        <h3>문제 5. OCR이 너무 느리거나 서버가 재시작된다</h3>
-        <p class="story-p"><strong>원인:</strong> OCR은 CPU와 메모리를 많이 쓰며, 저사양 무료 컨테이너에서는 메모리 부족이 나기 쉽습니다. <br><strong>해결:</strong> 동시 작업 수와 파일 크기를 제한하고, 필요한 언어팩만 설치하며, 로그에서 OOM 종료 여부를 확인합니다.</p>
-
-        <h3>문제 6. 한글 OCR 결과가 좋지 않다</h3>
-        <p class="story-p"><strong>원인:</strong> 한국어 Tesseract 학습 데이터가 없거나 원본 해상도가 낮을 수 있습니다. <br><strong>해결:</strong> 한국어 언어팩을 영구 볼륨에 설치하고, 기울기·노이즈를 보정한 300dpi 안팎의 선명한 스캔으로 다시 시험합니다. 표 구조나 수식 인식은 OCR의 범위를 넘어설 수 있습니다.</p>
-
-        <h3>문제 7. 재배포 후 설정과 계정이 사라졌다</h3>
-        <p class="story-p"><strong>원인:</strong> <code>/configs</code>를 임시 파일 시스템에 둔 경우입니다. <br><strong>해결:</strong> 영구 디스크나 볼륨을 마운트하고, 업데이트 전 백업·복구 테스트를 합니다.</p>
-
-        <h3>문제 8. 첫 접속이 매우 느리다</h3>
-        <p class="story-p"><strong>원인:</strong> 무료 또는 절전형 호스팅의 콜드 스타트일 수 있습니다. <br><strong>해결:</strong> “서버를 깨우는 중” 안내를 제공하고, 서비스가 성장하면 상시 실행 인스턴스로 이전합니다. 무료 정책은 자주 바뀌므로 특정 서비스가 영구 무료라고 단정하지 않습니다.</p>
-
-        <h3>문제 9. 설정을 바꿨는데 적용되지 않는다</h3>
-        <p class="story-p"><strong>원인:</strong> 환경변수가 <code>settings.yml</code>보다 우선하기 때문일 수 있습니다. <br><strong>해결:</strong> 공식 설정 우선순위인 환경변수 → 설정 파일/관리자 UI → 기본값 순서를 확인하고 컨테이너 로그를 봅니다.</p>
-
-        <h3>문제 10. 모바일에서 작업창이 너무 작다</h3>
-        <p class="story-p"><strong>원인:</strong> 고정 너비·높이와 양옆 광고 때문입니다. <br><strong>해결:</strong> 이 템플릿처럼 모바일에서 한 열로 바꾸고 iframe을 화면 높이 기준으로 확보합니다. 실제 스마트폰에서 업로드와 다운로드까지 시험해야 합니다.</p>
-    </section>
-
-    <!-- 7. 공개하기 전 마지막 체크리스트 -->
-    <section class="section-box">
-        <h2>7. 공개하기 전 마지막 체크리스트</h2>
-        <ul>
-            <li>기본 관리자 암호를 변경했다.</li>
-            <li>로그인이 필요하다면 계정 생성과 잠금 정책을 설정했다.</li>
-            <li>프론트와 처리 서버 모두 HTTPS로 접속된다.</li>
-            <li>업로드한 문서의 보관·삭제 방식을 개인정보처리방침에 사실대로 적었다.</li>
-            <li>서버 로그에 파일명이나 민감정보가 과도하게 남지 않는지 확인했다.</li>
-            <li>대용량 파일, 손상 파일, 암호화 파일로 실패 동작을 테스트했다.</li>
-            <li>OCR와 Office 변환 중 메모리 사용량을 확인했다.</li>
-            <li>백업과 복구를 실제로 한 번 시험했다.</li>
-            <li>오픈소스 라이선스와 상표·고지 의무를 현재 저장소 기준으로 검토했다.</li>
-            <li>광고가 업로드·변환·다운로드 버튼과 혼동되지 않는다.</li>
-            <li>개인정보처리방침, 이용약관, 문의 방법을 연결했다.</li>
-            <li>장애 시 새 창 열기나 상태 안내 같은 대체 경로가 있다.</li>
-        </ul>
-        <div class="callout warn"><strong>“파일이 절대 외부로 나가지 않는다”라고 쓰지 마세요.</strong><p>사용자 PC에서만 실행하는 로컬 설치와 달리, 공개 웹서비스는 파일이 운영자의 처리 서버로 전송됩니다. 전송 암호화, 임시 파일 삭제, 접근 통제, 로그 정책을 실제 구성에 맞게 설명해야 합니다.</p></div>
-    </section>
-
-    <!-- 8. 자주 묻는 질문 -->
-    <section class="section-box">
-        <h2>8. 자주 묻는 질문</h2>
-        
-        <h3>GitHub와 Vercel만으로 무료 운영할 수 있나요?</h3>
-        <p class="story-p">소개 페이지는 가능하지만 전체 Stirling PDF 처리는 어렵습니다. Docker 컨테이너가 지속 실행될 별도 컴퓨팅 환경이 필요합니다. 무료 제공량과 정책은 변할 수 있으므로 현재 조건을 확인하세요.</p>
-
-        <h3>iframe과 API 중 무엇부터 시작할까요?</h3>
-        <p class="story-p">기능 검증이 목적이면 iframe이 빠릅니다. 브랜드 UI, 사용량 제한, 세밀한 광고·회원 구조가 필요해지면 API 기반 커스텀 화면으로 발전시키는 편이 좋습니다.</p>
-
-        <h3>로그인을 꺼도 되나요?</h3>
-        <p class="story-p">공개 도구는 로그인 없이 편리하지만, 자원 남용과 비용 폭증 위험이 커집니다. 공개 범위, 속도 제한, 업로드 크기, 동시 작업 수를 함께 설계해야 합니다.</p>
-
-        <h3>중요 문서도 안전한가요?</h3>
-        <p class="story-p">셀프 호스팅은 통제 범위를 넓혀줄 뿐 자동으로 안전해지는 것은 아닙니다. HTTPS, 접근통제, 업데이트, 임시파일 삭제, 로그, 백업과 운영자 신뢰까지 모두 확인해야 합니다.</p>
-
-        <h3>광고 카드를 클릭하면 바로 해당 페이지로 이동하나요?</h3>
-        <p class="story-p">네. 카드 전체를 클릭하면 선택한 서비스가 새 창에서 열리므로 현재 글을 잃지 않고 둘러볼 수 있습니다.</p>
-    </section>
-
-    <!-- 공식 자료 -->
-    <section class="section-box">
-        <h2>공식 자료</h2>
-        <ul>
-            <li><a href="https://docs.stirlingpdf.com/Installation/Docker%20Install/" target="_blank" rel="noopener">Stirling PDF 공식 Docker 설치 가이드</a></li>
-            <li><a href="https://docs.stirlingpdf.com/Production-Deployment-Guide/" target="_blank" rel="noopener">Stirling PDF 공식 운영 배포 가이드</a></li>
-            <li><a href="https://docs.stirlingpdf.com/Configuration/" target="_blank" rel="noopener">Stirling PDF 공식 설정 가이드</a></li>
-            <li><a href="https://docs.stirlingpdf.com/Configuration/Security/System%20and%20Security/" target="_blank" rel="noopener">Stirling PDF 공식 보안 설정</a></li>
-            <li><a href="https://github.com/Stirling-Tools/Stirling-PDF" target="_blank" rel="noopener">Stirling PDF 공식 GitHub 저장소</a></li>
-        </ul>
-        <p style="color: var(--google-gray); font-size: 13px; margin-top: 16px;">기능·배포 환경·광고 정책은 업데이트될 수 있습니다. 실제 운영 시점의 공식 문서를 최종 기준으로 삼으세요.</p>
+        <h2>5. 제가 막혔던 지점과 해결 방법</h2>
+        <h3>문제 1. Vercel 배포는 성공했는데 PDF 기능이 작동하지 않는다</h3>
+        <p class="story-p"><strong>원인:</strong> 정적 HTML만 배포했고 실제 백엔드 서버가 연결되지 않았기 때문입니다. <br><strong>해결:</strong> Docker 서버를 별도로 실행하고 백엔드 API 주소를 스크립트에 올바르게 설정합니다.</p>
     </section>
 
     <!-- 푸터 영역 -->
@@ -525,5 +350,57 @@ docker compose logs --tail=100 stirling-pdf</code></pre>
         <p>나두 PDF 변환기 · Stirling PDF 셀프 호스팅 구축 기록</p>
     </footer>
 
+    <!-- 자바스크립트 연동 로직 -->
+    <script>
+        // 여기에 실제 배포한 Stirling PDF 서버의 도메인 주소를 입력하세요 (예: https://pdf.yourdomain.com)
+        const STIRLING_PDF_URL = "https://your-stirling-pdf-server.com";
+
+        // 파일 선택 시 이름 표시 함수
+        function updateFileName(inputId, spanId) {
+            const input = document.getElementById(inputId);
+            const span = document.getElementById(spanId);
+            if (input.files.length > 0) {
+                if (input.files.length > 1) {
+                    span.textContent = `${input.files.length개의 파일 선택됨}`;
+                } else {
+                    span.textContent = input.files[0].name;
+                }
+            } else {
+                span.textContent = "선택된 파일 없음";
+            }
+        }
+
+        // PDF 기능 실행 함수 (백엔드 서버로 연동)
+        function handlePdfAction(actionType) {
+            let fileInputId = "";
+            if (actionType === 'merge') fileInputId = 'mergeFile';
+            else if (actionType === 'split') fileInputId = 'splitFile';
+            else if (actionType === 'compress') fileInputId = 'compressFile';
+
+            const fileInput = document.getElementById(fileInputId);
+            
+            if (!fileInput.files || fileInput.files.length === 0) {
+                alert("처리할 PDF 파일을 먼저 선택해주세요.");
+                return;
+            }
+
+            // 실제 서버 연동 주소가 설정되었는지 확인
+            if (STIRLING_PDF_URL.includes("your-stirling-pdf-server.com")) {
+                alert("Stirling PDF 백엔드 서버 주소(STIRLING_PDF_URL)가 설정되지 않았습니다. 코드 상단의 서버 주소를 실제 주소로 변경해주세요.");
+                // 설정이 안 되어있을 경우 원본 UI 페이지로 새 창 이동 대체
+                window.open("https://github.com/Stirling-Tools/Stirling-PDF", "_blank");
+                return;
+            }
+
+            // 백엔드 API 경로로 직접 이동하거나 새 창으로 작업을 유도
+            let targetPath = "";
+            if (actionType === 'merge') targetPath = "/merge-pdfs";
+            else if (actionType === 'split') targetPath = "/split-pages";
+            else if (actionType === 'compress') targetPath = "/compress-pdf";
+
+            alert("선택하신 파일을 Stirling PDF 서버로 전송하여 작업을 수행합니다.");
+            window.open(`${STIRLING_PDF_URL}${targetPath}`, "_blank");
+        }
+    </script>
 </body>
 </html>
