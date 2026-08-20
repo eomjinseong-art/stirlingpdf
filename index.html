@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>초경량 PDF 올인원 & 개발 일지</title>
+    <style>
+        body { font-family: 'Apple SD Gothic Neo', sans-serif; line-height: 1.6; color: #333; max-width: 800px; margin: 0 auto; padding: 20px; background-color: #f9f9f9; }
+        header { background: #fff; padding: 30px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); margin-bottom: 20px; }
+        h1 { color: #2c3e50; margin-top: 0; }
+        .tool-box { background: #fff; padding: 30px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); margin-bottom: 20px; border: 2px dashed #3498db; }
+        .blog-post { background: #fff; padding: 30px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        button { background: #3498db; color: white; border: none; padding: 10px 20px; font-size: 16px; border-radius: 4px; cursor: pointer; }
+        button:hover { background: #2980b9; }
+        input[type="file"] { margin-bottom: 15px; display: block; }
+        code { background: #eee; padding: 2px 6px; border-radius: 4px; font-family: monospace; }
+        pre { background: #2d3748; color: #e2e8f0; padding: 15px; border-radius: 6px; overflow-x: auto; }
+        .highlight { color: #e74c3c; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <!-- 헤더 영역 -->
+    <header>
+        <h1>🚀 초경량 PDF 합치기 서비스 & 개발 스토리</h1>
+        <p>인프라 한계를 뛰어넘어 0원으로 배포하기까지의 생생한 실전 트러블슈팅 기록을 공유합니다.</p>
+    </header>
+
+    <!-- 실전 PDF 툴 영역 -->
+    <div class="tool-box">
+        <h2>🛠️ 실시간 PDF 합치기 Tool</h2>
+        <p>여러 개의 PDF 파일을 선택하고 버튼을 누르면 서버에서 즉시 합쳐진 파일을 다운로드할 수 있습니다.</p>
+        <input type="file" id="pdfInput" multiple accept=".pdf">
+        <button onclick="mergePDFs()">PDF 합치기 실행</button>
+        <p id="status" style="margin-top: 10px; font-weight: bold; color: #27ae60;"></p>
+    </div>
+
+    <!-- 블로그 포스팅 본문 영역 -->
+    <div class="blog-post">
+        <h2>📖 [개발일지] Stirling-PDF와 Render 무료 티어 OOM 지옥 탈출기</h2>
+        <hr style="border:0; border-top:1px solid #eee; margin:20px 0;">
+        
+        <h3>1. 마주한 문제: "Ran out of memory (used over 512MB)"</h3>
+        <p>무료 호스팅(Render) 환경에서 오픈소스 PDF 솔루션인 Stirling-PDF를 도커(Docker)로 띄우려 시도했다. 하지만 서버가 켜지자마자 <span class="highlight">OOM(Out of Memory) 에러</span>를 뿜어내며 곧바로 다운됐다.</p>
+        <p><strong>원인:</strong> Stirling-PDF는 자바(Java), LibreOffice, Tesseract OCR 등 무거운 패키지가 통째로 묶여 있는 모놀리식 구조라 최소 1~2GB 이상의 RAM이 필수적이었다. 무료 서버의 512MB 한계로는 물리적으로 구동이 불가능했다.</p>
+
+        <h3>2. 해결을 위한 3가지 전략 검토</h3>
+        <ul>
+            <li><strong>전략 1 (유료 전환):</strong> 월 $7의 Hobby 플랜으로 업그레이드 $\rightarrow$ 가장 편하지만 완전 무료 기조에 위배됨.</li>
+            <li><strong>전략 2 (오라클 클라우드):</strong> 24GB 무료 VPS 활용 $\rightarrow$ 강력하지만 까다로운 가입 심사와 리눅스 초기 세팅의 스트레스.</li>
+            <li><strong>전략 3 (초경량 커스텀 백엔드):</strong> 핵심 기능(합치기)만 뽑아 파이썬(Flask + PyPDF)으로 직접 구현 $\rightarrow$ <strong>최종 선택!</strong></li>
+        </ul>
+
+        <h3>3. 아키텍처 재조정과 실천</h3>
+        <p>시간은 가장 소중한 자산이다. 무리하게 무거운 오픈소스를 고집하기보다, 비즈니스 목적에 맞게 몸집을 극단적으로 다이어트한 파이썬 백엔드를 구축해 Render 무료 티어(512MB)에 안착시켰다.</p>
+        <pre><code># 초경량 백엔드 핵심 로직 (Python Flask)
+from flask import Flask, request, send_file
+from pypdf import PdfMerger
+import os
+
+app = Flask(__name__)
+@app.route('/merge', methods=['POST'])
+def merge_pdfs():
+    files = request.files.getlist('files')
+    merger = PdfMerger()
+    for file in files:
+        merger.append(file)
+    output_path = "/tmp/merged.pdf"
+    merger.write(output_path)
+    merger.close()
+    return send_file(output_path, as_attachment=True, download_name="merged.pdf")</code></pre>
+
+        <h3>4. 최종 결론</h3>
+        <p>인프라 장벽에 부딪혔을 때 무리한 서버 튜닝에 매달리기보다, <strong>요구사항의 본질만 남기고 아키텍처를 가볍게 재조정하는 유연함</strong>이 비즈니스 속도를 지키는 핵심이라는 것을 깨달았다. 이 웹사이트는 Vercel과 Render 무료 인프라 위에서 비용 0원으로 완벽하게 작동한다.</p>
+    </div>
+
+    <!-- 자바스크립트 연동 로직 -->
+    <script>
+        async function mergePDFs() {
+            const files = document.getElementById('pdfInput').files;
+            const status = document.getElementById('status');
+            
+            if (files.length === 0) {
+                alert('합칠 PDF 파일을 선택해주세요!');
+                return;
+            }
+
+            const formData = new FormData();
+            for (let i = 0; i < files.length; i++) {
+                formData.append('files', files[i]);
+            }
+
+            status.innerText = "⏳ 서버에서 PDF를 병합 중입니다...";
+
+            try {
+                // 실제 Render 백엔드 주소 연동
+                const response = await fetch('https://stirlingpdf-k9ao.onrender.com/merge', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (!response.ok) throw new Error('서버 처리 중 오류가 발생했습니다.');
+
+                const blob = await response.blob();
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = "merged.pdf";
+                a.click();
+                
+                status.innerText = "✅ 병합 완료! 파일이 다운로드되었습니다.";
+            } catch (error) {
+                console.error(error);
+                status.innerText = "❌ 에러 발생: " + error.message;
+            }
+        }
+    </script>
+</body>
+</html>
