@@ -127,16 +127,6 @@
             line-height: 1.6; 
         }
 
-        .callout { 
-            border-left: 4px solid var(--google-blue); 
-            background: #e8f0fe; 
-            padding: 16px 20px; 
-            margin: 20px 0; 
-            border-radius: 0 4px 4px 0; 
-            color: #174ea6; 
-            font-size: 14px;
-        }
-
         .table-wrap { overflow: auto; margin: 20px 0; border: 1px solid var(--google-border); border-radius: 6px; }
         table { width: 100%; border-collapse: collapse; font-size: 14px; }
         th, td { text-align: left; padding: 12px 16px; border-bottom: 1px solid var(--google-border); }
@@ -177,7 +167,6 @@
             text-overflow: ellipsis;
             white-space: nowrap;
         }
-        /* 파일 입력 버튼 디자인용 레이블 */
         .file-upload-label {
             background: #f1f3f4;
             color: var(--google-text);
@@ -227,10 +216,10 @@
         <p class="story-p">GitHub와 Vercel만 사용하던 초보자의 관점에서, 왜 별도 서버가 필요했는지부터 Docker 설치, iframe 연결, 보안 설정, 광고 배치와 오류 해결까지 하나씩 풀어 쓴 구축기입니다.</p>
     </section>
 
-    <!-- PDF 변환 기능 UI 영역 (오류 수정 완료) -->
+    <!-- PDF 변환 기능 UI 영역 -->
     <section id="tool" class="section-box">
         <h2>✨ 나두 PDF 변환기 - 올인원 PDF 유틸리티</h2>
-        <p class="story-p">아래 도구들은 별도로 구축한 Stirling PDF 백엔드 서버와 연동되어 실제로 PDF 합치기, 나누기, 압축 작업을 처리합니다.</p>
+        <p class="story-p">선택하신 Vercel 배포 주소와 연동되어 PDF 작업을 수행합니다.</p>
         
         <!-- 1. PDF 합치기 -->
         <div class="pdf-func-card">
@@ -282,65 +271,17 @@
         <span class="ad-arrow">→</span>
     </a>
 
-    <!-- 1. 먼저, Stirling PDF가 무엇인지부터 -->
-    <section id="what" class="section-box">
-        <h2>1. 먼저, Stirling PDF가 무엇인지부터</h2>
-        <p class="story-p">Stirling PDF는 PDF 합치기, 나누기, 페이지 회전, 압축, 이미지 변환, OCR 같은 여러 문서 작업을 브라우저 화면에서 수행할 수 있게 만든 오픈소스 PDF 처리 애플리케이션입니다.</p>
-    </section>
-
-    <!-- AD 3: 그날의 남녀 광고 -->
-    <a class="ad-card" href="https://couple-score.vercel.app/" target="_blank" rel="sponsored noopener">
-        <div class="ad-copy">
-            <span class="ad-icon">♡</span>
-            <div class="ad-text">
-                <small class="ad-disclosure">ADVERTISEMENT</small>
-                <strong>그날의 남녀</strong>
-                <p>우리의 특별한 사랑을 기록하는 공간 바로가기</p>
-            </div>
-        </div>
-        <span class="ad-arrow">→</span>
-    </a>
-
-    <!-- 2. 제가 선택한 구조 -->
-    <section id="architecture" class="section-box">
-        <h2>2. 제가 선택한 구조: 화면과 처리 서버 분리</h2>
-        <p class="story-p">Vercel은 사용자가 보는 프론트엔드를 담당하고, 실제 PDF 처리는 Docker 서버가 담당하도록 분리합니다.</p>
-    </section>
-
-    <!-- AD 4: 피드스캔 Ai 광고 -->
-    <a class="ad-card" href="https://aimoneyscanner.vercel.app/" target="_blank" rel="sponsored noopener">
-        <div class="ad-copy">
-            <span class="ad-icon">F</span>
-            <div class="ad-text">
-                <small class="ad-disclosure">ADVERTISEMENT</small>
-                <strong>피드스캔Ai</strong>
-                <p>AI로 돈 버는 사람들, 스마트한 수익화 팁 바로가기</p>
-            </div>
-        </div>
-        <span class="ad-arrow">→</span>
-    </a>
-
-    <!-- 3. 실제 구축 과정 -->
-    <section id="build" class="section-box">
-        <h2>3. 실제 구축 과정: 처음부터 차근차근</h2>
-        <pre><code>docker run -d \
-  --name stirling-pdf \
-  -p 8080:8080 \
-  -v ./stirling-data:/configs \
-  docker.stirlingpdf.com/stirlingtools/stirling-pdf:latest</code></pre>
-    </section>
-
     <!-- 푸터 영역 -->
     <footer style="border-top: 1px solid var(--google-border); padding-top: 24px; margin-top: 32px; color: var(--google-gray); font-size: 13px; text-align: center;">
         <p>나두 PDF 변환기 · Stirling PDF 셀프 호스팅 구축 기록</p>
     </footer>
 
-    <!-- 자바스크립트 오류 원천 차단 및 이벤트 바인딩 로직 -->
+    <!-- 자바스크립트 연동 로직 -->
     <script>
-        // Stirling PDF 백엔드 서버 도메인 주소 설정
-        const STIRLING_PDF_URL = "https://your-stirling-pdf-server.com";
+        // 사용자가 제공해주신 Vercel 배포 주소 반영
+        const STIRLING_PDF_URL = "https://stirlingpdf-one.vercel.app/";
 
-        // 파일 선택 감지 및 UI 업데이트 이벤트 등록
+        // 파일 선택 시 이름 표시 함수
         function setupFileInput(inputId, spanId) {
             const input = document.getElementById(inputId);
             const span = document.getElementById(spanId);
@@ -360,7 +301,6 @@
             }
         }
 
-        // 페이지 로드 시 각 기능별 파일 인풋 리스너 활성화
         window.addEventListener('DOMContentLoaded', () => {
             setupFileInput('mergeFile', 'mergeFileName');
             setupFileInput('splitFile', 'splitFileName');
@@ -381,19 +321,13 @@
                 return;
             }
 
-            if (STIRLING_PDF_URL.includes("your-stirling-pdf-server.com")) {
-                alert("Stirling PDF 백엔드 서버 주소(STIRLING_PDF_URL)가 설정되지 않았습니다. 코드 상단의 서버 주소를 실제 주소로 변경해주세요.");
-                window.open("https://github.com/Stirling-Tools/Stirling-PDF", "_blank");
-                return;
-            }
-
             let targetPath = "";
-            if (actionType === 'merge') targetPath = "/merge-pdfs";
-            else if (actionType === 'split') targetPath = "/split-pages";
-            else if (actionType === 'compress') targetPath = "/compress-pdf";
+            if (actionType === 'merge') targetPath = "merge-pdfs";
+            else if (actionType === 'split') targetPath = "split-pages";
+            else if (actionType === 'compress') targetPath = "compress-pdf";
 
-            alert("선택하신 파일을 Stirling PDF 서버로 전송합니다.");
-            window.open(`${STIRLING_PDF_URL}${targetPath}`, "_blank");
+            alert("Stirling PDF 서비스로 이동합니다.");
+            window.open(`${STIRLING_PDF_URL.replace(/\/$/, "")}/${targetPath}`, "_blank");
         }
     </script>
 </body>
