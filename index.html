@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>나두PDF - 무료 올인원 PDF 유틸리티 & 심층 개발 일지</title>
+    <title>나두 PDF 변환기 - 무료 올인원 PDF 유틸리티 & 심층 개발 일지</title>
     <style>
         :root { 
             --google-blue: #1a73e8; 
@@ -52,7 +52,7 @@
             color: var(--google-blue); 
         }
 
-        /* 광고 배너 스타일 */
+        /* 광고 배너 링크 스타일 (클릭 가능) */
         .ad-banner { 
             background: var(--google-card); 
             border: 1px dashed var(--google-border); 
@@ -60,9 +60,22 @@
             text-align: center; 
             border-radius: 8px; 
             margin: 24px 0; 
-            color: var(--google-gray); 
-            font-weight: 500; 
+            transition: all 0.2s ease;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.02);
+        }
+        .ad-banner a {
+            text-decoration: none;
+            color: var(--google-gray);
+            font-weight: 500;
             font-size: 14px;
+            display: block;
+            width: 100%;
+        }
+        .ad-banner:hover {
+            border-color: var(--google-blue);
+            background: #f1f3f4;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
         }
         .ad-label { font-size: 10px; color: #9aa0a6; display: block; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
 
@@ -113,7 +126,6 @@
             font-size: 14px;
         }
         
-        /* 💡 가독성이 대폭 개선된 코드 블록 (밝고 부드러운 다크 테마) */
         code { 
             background: #f1f3f4; 
             color: #c7254e; 
@@ -133,11 +145,10 @@
             line-height: 1.6; 
             box-shadow: inset 0 1px 3px rgba(0,0,0,0.2);
         }
-        /* 파이썬 코드 신택스 컬러 하이라이팅 모사 */
-        .code-kw { color: #c678dd; } /* 키워드 (from, import, def) */
-        .code-fn { color: #61afef; } /* 함수 */
-        .code-str { color: #98c379; } /* 문자열 */
-        .code-cm { color: #5c6370; font-style: italic; } /* 주석 */
+        .code-kw { color: #c678dd; } 
+        .code-fn { color: #61afef; } 
+        .code-str { color: #98c379; } 
+        .code-cm { color: #5c6370; font-style: italic; } 
 
         .summary-box { 
             background: #e8f0fe; 
@@ -164,15 +175,17 @@
 </head>
 <body>
 
-    <!-- AD 1: 아브아르 광고 -->
+    <!-- AD 1: 아브아르 광고 (링크 연결) -->
     <div class="ad-banner">
-        <span class="ad-label">Sponsored Advertisement</span>
-        🚀 [AD 1] 아브아르 프리미엄 광고 영역
+        <a href="https://avoir24.com" target="_blank">
+            <span class="ad-label">Sponsored Advertisement</span>
+            🚀 [AD 1] 아브아르 공식 사이트 바로가기
+        </a>
     </div>
 
     <!-- 상단 네비게이션바 -->
     <nav>
-        <a onclick="showTab('tool')">🛠️ 나두PDF 유틸리티</a>
+        <a onclick="showTab('tool')">🛠️ 나두 PDF 유틸리티</a>
         <a onclick="showTab('about')">📖 Stirling-PDF 분석</a>
         <a onclick="showTab('guide')">🚀 아키텍처 구축 가이드</a>
         <a onclick="showTab('trouble')">🔥 심층 트러블슈팅 일지</a>
@@ -180,7 +193,7 @@
 
     <!-- 1. PDF 유틸리티 메인 화면 -->
     <div id="tool" class="section-box active">
-        <h1>✨ 나두PDF - 초경량 올인원 PDF 변환기</h1>
+        <h1>✨ 나두 PDF 변환기 - 올인원 PDF 유틸리티</h1>
         <p class="story-p">복잡한 프로그램 설치 없이, 웹 브라우저에서 안전하고 빠르게 PDF를 편집하세요. 무료 클라우드 환경에서도 안정적으로 작동하도록 최적화되어 있습니다.</p>
         
         <!-- PDF 합치기 -->
@@ -210,10 +223,12 @@
         <p id="status" style="margin-top: 15px; font-weight: 500; color: #137333; font-size: 14px;"></p>
     </div>
 
-    <!-- AD 2: 나두Ai 광고 -->
+    <!-- AD 2: 나두Ai 광고 (링크 연결) -->
     <div class="ad-banner">
-        <span class="ad-label">Sponsored Advertisement</span>
-        🤖 [AD 2] 나두Ai 스마트 솔루션 광고 영역
+        <a href="https://blog.nadoo.ai" target="_blank">
+            <span class="ad-label">Sponsored Advertisement</span>
+            🤖 [AD 2] 나두Ai 스마트 솔루션 공식 블로그 바로가기
+        </a>
     </div>
 
     <!-- 2. Stirling-PDF 분석 -->
@@ -230,10 +245,12 @@
         <div class="summary-box">💡 핵심 요약: 가벼운 작업에 너무 무거운 패키지들을 동시에 구동하는 구조라, 512MB 제한의 무료 서버에서는 버텨낼 재간이 없습니다.</div>
     </div>
 
-    <!-- AD 3: 그날의 남녀 광고 -->
+    <!-- AD 3: 그날의 남녀 광고 (링크 연결) -->
     <div class="ad-banner">
-        <span class="ad-label">Sponsored Advertisement</span>
-        ✨ [AD 3] 그날의 남녀 라이프스타일 광고 영역
+        <a href="https://www.jeonjufest.kr" target="_blank">
+            <span class="ad-label">Sponsored Advertisement</span>
+            ✨ [AD 3] 그날의 남녀 관련 독립영화/문화 콘텐츠 정보 바로가기
+        </a>
     </div>
 
     <!-- 3. 구축 방법 -->
@@ -259,7 +276,6 @@
         <h2>🔥 심층 트러블슈팅 일지: OOM 지옥 탈출기</h2>
         <p class="story-p">처음부터 이 아키텍처가 완성된 것은 아닙니다. 첫 배포를 감행했을 때, Render 무료 티어의 물리적 한계에 부딪혀 서버 콘솔창에 다음과 같은 치명적인 에러가 찍혔습니다.</p>
         
-        <!-- 가독성이 대폭 개선된 코드 블록 영역 -->
         <pre><code><span class="code-kw">Exited</span> with status 1 while building your code.
 <span class="code-kw">ERROR</span>: Ran out of memory (used over 512MB) - Server Crashed.
 <span class="code-cm"># 512MB RAM 제한을 초과하여 자바 기반 모놀리식 서버가 즉시 다운된 상황</span></code></pre>
@@ -280,10 +296,12 @@
         <div class="summary-box">💡 핵심 요약: 한정된 인프라 환경에서 완벽한 도구를 찾기보다, 핵심 기능만 남기고 가볍게 덜어내는 유연함이 실전 개발의 핵심입니다.</div>
     </div>
 
-    <!-- AD 4: 피드스캔 Ai 광고 -->
+    <!-- AD 4: 피드스캔 Ai 광고 (링크 연결) -->
     <div class="ad-banner">
-        <span class="ad-label">Sponsored Advertisement</span>
-        🔍 [AD 4] 피드스캔 Ai 빅데이터 분석 광고 영역
+        <a href="https://play.google.com/store/apps/details?id=com.photo.pdfscanner&hl=ko" target="_blank">
+            <span class="ad-label">Sponsored Advertisement</span>
+            🔍 [AD 4] 피드스캔 Ai 문서 스캐너 앱 구글플레이 바로가기
+        </a>
     </div>
 
     <!-- 자바스크립트 기능 연동 로직 -->
@@ -307,7 +325,7 @@
             try {
                 const res = await fetch(`${BACKEND_URL}/merge`, { method: 'POST', body: formData });
                 if (!res.ok) throw new Error('서버 처리 실패');
-                downloadBlob(await res.blob(), "merged_nadupdf.pdf");
+                downloadBlob(await res.blob(), "nadupdf_merged.pdf");
             } catch (e) { alert("에러 발생: " + e.message); document.getElementById('status').innerText = ""; }
         }
 
@@ -327,7 +345,7 @@
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url; a.download = filename; a.click();
-            document.getElementById('status').innerText = "✅ 작업 완료! 나두PDF 파일이 성공적으로 다운로드되었습니다.";
+            document.getElementById('status').innerText = "✅ 작업 완료! 나두 PDF 파일이 성공적으로 다운로드되었습니다.";
         }
     </script>
 </body>
