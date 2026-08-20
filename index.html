@@ -3,7 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>나두 PDF 변환기 - Stirling PDF를 내 웹사이트 안에 넣기까지</title>
+    <title>나두 PDF 변환기 - 브라우저에서 바로 실행되는 올인원 PDF 유틸리티</title>
+    <!-- 브라우저 전용 PDF 처리 라이브러리 (pdf-lib) 로드 -->
+    <script src="https://unpkg.com/pdf-lib@1.4.0/dist/pdf-lib.min.js"></script>
     <style>
         :root { 
             --google-blue: #1a73e8; 
@@ -52,7 +54,7 @@
             color: var(--google-blue); 
         }
 
-        /* 광고 카드 스타일 (클릭 가능) */
+        /* 광고 카드 스타일 */
         .ad-card {
             display: flex;
             align-items: center;
@@ -108,33 +110,6 @@
         }
         button:hover { background: var(--google-blue-hover); }
 
-        code { 
-            background: #f1f3f4; 
-            color: #c7254e; 
-            padding: 2px 6px; 
-            border-radius: 4px; 
-            font-family: 'Consolas', monospace; 
-            font-size: 13px; 
-        }
-        pre { 
-            background: #282c34; 
-            color: #abb2bf; 
-            padding: 20px; 
-            border-radius: 6px; 
-            overflow-x: auto; 
-            font-family: 'Consolas', monospace;
-            font-size: 13px; 
-            line-height: 1.6; 
-        }
-
-        .table-wrap { overflow: auto; margin: 20px 0; border: 1px solid var(--google-border); border-radius: 6px; }
-        table { width: 100%; border-collapse: collapse; font-size: 14px; }
-        th, td { text-align: left; padding: 12px 16px; border-bottom: 1px solid var(--google-border); }
-        th { background: #f1f3f4; font-weight: 500; }
-        tr:last-child td { border-bottom: 0; }
-
-        ul, ol { margin-bottom: 16px; padding-left: 20px; color: var(--google-text); }
-        li { margin-bottom: 8px; font-size: 15px; }
         .story-p { margin-bottom: 16px; text-align: justify; font-size: 15px; color: #3c4043; }
 
         /* PDF 기능 카드 스타일 */
@@ -202,24 +177,19 @@
     <!-- 상단 네비게이션바 -->
     <nav>
         <a href="#tool">🛠️ PDF 도구</a>
-        <a href="#what">📖 Stirling PDF란?</a>
-        <a href="#architecture">🏗️ 전체 구조</a>
-        <a href="#build">🚀 구축 과정</a>
-        <a href="#vercel">🔗 Vercel 연결</a>
-        <a href="#troubleshooting">🔥 문제 해결</a>
+        <a href="#what">📖 소개</a>
     </nav>
 
     <!-- 머리말 영역 -->
     <section class="section-box">
-        <h1>Stirling PDF를 내 웹사이트 안에 넣기까지</h1>
-        <p style="color: var(--google-gray); font-style: italic; margin-bottom: 16px;">직접 만들고 부딪혀 본 셀프 호스팅 기록</p>
-        <p class="story-p">GitHub와 Vercel만 사용하던 초보자의 관점에서, 왜 별도 서버가 필요했는지부터 Docker 설치, iframe 연결, 보안 설정, 광고 배치와 오류 해결까지 하나씩 풀어 쓴 구축기입니다.</p>
+        <h1>나두 PDF 변환기 - 서버 없는 초고속 PDF 유틸리티</h1>
+        <p style="color: var(--google-gray); font-style: italic; margin-bottom: 16px;">서버 비용 0원, 개인정보 유출 걱정 없는 클라이언트 사이드 PDF 처리</p>
+        <p class="story-p">별도의 복잡한 백엔드 서버 없이 브라우저 안에서 안전하고 빠르게 PDF를 병합하고 관리할 수 있습니다.</p>
     </section>
 
     <!-- PDF 변환 기능 UI 영역 -->
     <section id="tool" class="section-box">
-        <h2>✨ 나두 PDF 변환기 - 올인원 PDF 유틸리티</h2>
-        <p class="story-p">선택하신 Vercel 배포 주소와 연동되어 PDF 작업을 수행합니다.</p>
+        <h2>✨ 올인원 PDF 도구 (브라우저 자체 실행)</h2>
         
         <!-- 1. PDF 합치기 -->
         <div class="pdf-func-card">
@@ -230,31 +200,31 @@
                 <input type="file" id="mergeFile" multiple accept=".pdf" style="display: none;">
                 <span id="mergeFileName" class="file-name-display">선택된 파일 없음</span>
             </div>
-            <button onclick="handlePdfAction('merge')">PDF 합치기 실행</button>
+            <button onclick="handleMerge()">PDF 합치기 실행 및 다운로드</button>
         </div>
 
         <!-- 2. PDF 나누기 -->
         <div class="pdf-func-card">
-            <h3>2. PDF 나누기 (Split)</h3>
-            <p style="color: var(--google-gray); font-size: 14px; margin: 0;">거대한 PDF 파일에서 필요한 페이지만 깔끔하게 추출합니다.</p>
+            <h3>2. PDF 나누기 (Split / 첫 페이지 추출)</h3>
+            <p style="color: var(--google-gray); font-size: 14px; margin: 0;">선택한 PDF 파일의 첫 번째 페이지만 별도로 추출합니다.</p>
             <div class="file-input-box">
                 <label for="splitFile" class="file-upload-label">파일 선택</label>
                 <input type="file" id="splitFile" accept=".pdf" style="display: none;">
                 <span id="splitFileName" class="file-name-display">선택된 파일 없음</span>
             </div>
-            <button onclick="handlePdfAction('split')">PDF 나누기 실행</button>
+            <button onclick="handleSplit()">PDF 나누기 실행 및 다운로드</button>
         </div>
 
-        <!-- 3. PDF 압축 -->
+        <!-- 3. PDF 다운로드/압축 안내 -->
         <div class="pdf-func-card">
-            <h3>3. PDF 압축 (Compress)</h3>
-            <p style="color: var(--google-gray); font-size: 14px; margin: 0;">문서 화질은 유지하면서 파일 용량을 가볍게 최적화합니다.</p>
+            <h3>3. PDF 최적화 (Optimize)</h3>
+            <p style="color: var(--google-gray); font-size: 14px; margin: 0;">PDF 구조를 재구성하여 깔끔하게 정리된 파일로 다운로드합니다.</p>
             <div class="file-input-box">
                 <label for="compressFile" class="file-upload-label">파일 선택</label>
                 <input type="file" id="compressFile" accept=".pdf" style="display: none;">
                 <span id="compressFileName" class="file-name-display">선택된 파일 없음</span>
             </div>
-            <button onclick="handlePdfAction('compress')">PDF 압축 실행</button>
+            <button onclick="handleCompress()">PDF 최적화 실행 및 다운로드</button>
         </div>
     </section>
 
@@ -273,13 +243,12 @@
 
     <!-- 푸터 영역 -->
     <footer style="border-top: 1px solid var(--google-border); padding-top: 24px; margin-top: 32px; color: var(--google-gray); font-size: 13px; text-align: center;">
-        <p>나두 PDF 변환기 · Stirling PDF 셀프 호스팅 구축 기록</p>
+        <p>나두 PDF 변환기 · 브라우저 독립형 웹 서비스</p>
     </footer>
 
-    <!-- 자바스크립트 연동 로직 (404 오류 방지형 메인 주소 연결) -->
+    <!-- 브라우저 전용 PDF 처리 자바스크립트 로직 -->
     <script>
-        const STIRLING_PDF_URL = "https://stirlingpdf-one.vercel.app/";
-
+        // 파일 선택 UI 바인딩
         function setupFileInput(inputId, spanId) {
             const input = document.getElementById(inputId);
             const span = document.getElementById(spanId);
@@ -288,7 +257,7 @@
                 input.addEventListener('change', function() {
                     if (this.files && this.files.length > 0) {
                         if (this.files.length > 1) {
-                            span.textContent = `${this.files.length}개의 파일 선택됨 (${this.files[0].name} 외)`;
+                            span.textContent = `${this.files.length}개 파일 선택됨 (${this.files[0].name} 외)`;
                         } else {
                             span.textContent = this.files[0].name;
                         }
@@ -305,22 +274,91 @@
             setupFileInput('compressFile', 'compressFileName');
         });
 
-        function handlePdfAction(actionType) {
-            let fileInputId = "";
-            if (actionType === 'merge') fileInputId = 'mergeFile';
-            else if (actionType === 'split') fileInputId = 'splitFile';
-            else if (actionType === 'compress') fileInputId = 'compressFile';
-
-            const fileInput = document.getElementById(fileInputId);
-            
-            if (!fileInput || !fileInput.files || fileInput.files.length === 0) {
-                alert("처리할 PDF 파일을 먼저 선택해주세요.");
+        // 1. PDF 합치기 기능
+        async function handleMerge() {
+            const fileInput = document.getElementById('mergeFile');
+            if (!fileInput.files || fileInput.files.length < 2) {
+                alert("합치기 위해 2개 이상의 PDF 파일을 선택해주세요.");
                 return;
             }
 
-            alert("Stirling PDF 메인 페이지로 이동합니다.");
-            // 404 오류를 방지하기 위해 유효한 메인 주소로 연결
-            window.open(STIRLING_PDF_URL, "_blank");
+            try {
+                alert("파일을 병합 중입니다. 잠시만 기다려주세요.");
+                const mergedPdf = await PDFLib.PDFDocument.create();
+
+                for (let file of fileInput.files) {
+                    const arrayBuffer = await file.arrayBuffer();
+                    const pdf = await PDFLib.PDFDocument.load(arrayBuffer);
+                    const copiedPages = await mergedPdf.copyPages(pdf, pdf.getgetPageIndices ? pdf.getgetPageIndices() : Array.from({length: pdf.getPageCount()}, (_, i) => i));
+                    copiedPages.forEach((page) => mergedPdf.addPage(page));
+                }
+
+                const mergedPdfFileBytes = await mergedPdf.save();
+                downloadFile(mergedPdfFileBytes, "merged_document.pdf", "application/pdf");
+            } catch (error) {
+                console.error(error);
+                alert("PDF 합치기 중 오류가 발생했습니다.");
+            }
+        }
+
+        // 2. PDF 나누기 (첫 페이지 추출) 기능
+        async function handleSplit() {
+            const fileInput = document.getElementById('splitFile');
+            if (!fileInput.files || fileInput.files.length === 0) {
+                alert("나눌 PDF 파일을 선택해주세요.");
+                return;
+            }
+
+            try {
+                alert("첫 페이지를 추출 중입니다.");
+                const file = fileInput.files[0];
+                const arrayBuffer = await file.arrayBuffer();
+                const pdf = await PDFLib.PDFDocument.load(arrayBuffer);
+
+                const subPdf = await PDFLib.PDFDocument.create();
+                const [firstPage] = await subPdf.copyPages(pdf, [0]);
+                subPdf.addPage(firstPage);
+
+                const pdfBytes = await subPdf.save();
+                downloadFile(pdfBytes, "split_first_page.pdf", "application/pdf");
+            } catch (error) {
+                console.error(error);
+                alert("PDF 나누기 중 오류가 발생했습니다.");
+            }
+        }
+
+        // 3. PDF 최적화/다운로드 기능
+        async function handleCompress() {
+            const fileInput = document.getElementById('compressFile');
+            if (!fileInput.files || fileInput.files.length === 0) {
+                alert("최적화할 PDF 파일을 선택해주세요.");
+                return;
+            }
+
+            try {
+                alert("파일을 최적화하는 중입니다.");
+                const file = fileInput.files[0];
+                const arrayBuffer = await file.arrayBuffer();
+                const pdf = await PDFLib.PDFDocument.load(arrayBuffer);
+                const pdfBytes = await pdf.save();
+                
+                downloadFile(pdfBytes, "optimized_document.pdf", "application/pdf");
+            } catch (error) {
+                console.error(error);
+                alert("PDF 처리 중 오류가 발생했습니다.");
+            }
+        }
+
+        // 파일 다운로드 헬퍼 함수
+        function downloadFile(bytes, filename, mimeType) {
+            const blob = new Blob([bytes], { type: mimeType });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = filename;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            alert("처리가 완료되어 파일이 다운로드되었습니다.");
         }
     </script>
 </body>
