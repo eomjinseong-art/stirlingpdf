@@ -177,24 +177,24 @@
     <!-- 상단 네비게이션바 -->
     <nav>
         <a href="#tool">🛠️ PDF 도구</a>
-        <a href="#what">📖 소개</a>
+        <a href="#story">📖 구축 사례 및 블로그</a>
     </nav>
 
     <!-- 머리말 영역 -->
     <section class="section-box">
         <h1>나두 PDF 변환기 - 서버 없는 초고속 PDF 유틸리티</h1>
         <p style="color: var(--google-gray); font-style: italic; margin-bottom: 16px;">서버 비용 0원, 개인정보 유출 걱정 없는 클라이언트 사이드 PDF 처리</p>
-        <p class="story-p">별도의 복잡한 백엔드 서버 없이 브라우저 안에서 안전하고 빠르게 PDF를 병합하고 관리할 수 있습니다.</p>
+        <p class="story-p">별도의 복잡한 백엔드 서버 없이 브라우저 안에서 안전하고 빠르게 PDF를 병합하고 분할할 수 있습니다.</p>
     </section>
 
     <!-- PDF 변환 기능 UI 영역 -->
     <section id="tool" class="section-box">
-        <h2>✨ 올인원 PDF 도구 (브라우저 자체 실행)</h2>
+        <h2>✨ 핵심 PDF 유틸리티 (브라우저 자체 실행)</h2>
         
         <!-- 1. PDF 합치기 -->
         <div class="pdf-func-card">
             <h3>1. PDF 합치기 (Merge)</h3>
-            <p style="color: var(--google-gray); font-size: 14px; margin: 0;">여러 개의 PDF 파일을 순서대로 하나로 병합합니다.</p>
+            <p style="color: var(--google-gray); font-size: 14px; margin: 0;">여러 개의 PDF 파일을 순서대로 깔끔하게 하나로 병합합니다.</p>
             <div class="file-input-box">
                 <label for="mergeFile" class="file-upload-label">파일 선택</label>
                 <input type="file" id="mergeFile" multiple accept=".pdf" style="display: none;">
@@ -205,27 +205,40 @@
 
         <!-- 2. PDF 나누기 -->
         <div class="pdf-func-card">
-            <h3>2. PDF 나누기 (Split / 첫 페이지 추출)</h3>
-            <p style="color: var(--google-gray); font-size: 14px; margin: 0;">선택한 PDF 파일의 첫 번째 페이지만 별도로 추출합니다.</p>
+            <h3>2. PDF 나누기 (모든 페이지 개별 파일로 쪼개기)</h3>
+            <p style="color: var(--google-gray); font-size: 14px; margin: 0;">PDF 파일의 모든 페이지를 낱장(각각의 독립된 PDF 파일)으로 완벽하게 분할합니다.</p>
             <div class="file-input-box">
                 <label for="splitFile" class="file-upload-label">파일 선택</label>
                 <input type="file" id="splitFile" accept=".pdf" style="display: none;">
                 <span id="splitFileName" class="file-name-display">선택된 파일 없음</span>
             </div>
-            <button onclick="handleSplit()">PDF 나누기 실행 및 다운로드</button>
+            <button onclick="handleSplit()">PDF 나누기 실행 및 전체 다운로드</button>
         </div>
+    </section>
 
-        <!-- 3. PDF 다운로드/압축 안내 -->
-        <div class="pdf-func-card">
-            <h3>3. PDF 최적화 (Optimize)</h3>
-            <p style="color: var(--google-gray); font-size: 14px; margin: 0;">PDF 구조를 재구성하여 깔끔하게 정리된 파일로 다운로드합니다.</p>
-            <div class="file-input-box">
-                <label for="compressFile" class="file-upload-label">파일 선택</label>
-                <input type="file" id="compressFile" accept=".pdf" style="display: none;">
-                <span id="compressFileName" class="file-name-display">선택된 파일 없음</span>
-            </div>
-            <button onclick="handleCompress()">PDF 최적화 실행 및 다운로드</button>
-        </div>
+    <!-- 구축 사례 및 블로그 형식의 스토리 섹션 복구 -->
+    <section id="story" class="section-box">
+        <h2>📖 [구축 사례] 서버 비용 0원으로 고성능 PDF 웹 서비스 독립 구축하기</h2>
+        
+        <p class="story-p">
+            디지털 문서 작업을 하다 보면 여러 개의 PDF를 하나로 합치거나 긴 문서를 페이지별로 쪼개야 하는 상황이 빈번하게 발생합니다. 
+            하지만 기존의 상용 변환 사이트들은 대용량 파일을 업로드할 때 서버 과부하를 이유로 유료 구독을 유도하거나, 
+            중요한 기밀 문서가 외부 서버로 전송되어 보안상 치명적인 취약점을 안고 있었습니다.
+        </p>
+
+        <h3>1. 프로젝트 기획 배경과 아키텍처의 전환</h3>
+        <p class="story-p">
+            본 서비스는 초기 기획 단계에서 무거운 Java 기반 백엔드 서버를 구축하려 했으나, 
+            클라우드 유지 비용 절감과 완벽한 보안(Client-Side Processing)을 위해 웹 브라우저 엔진 자체를 활용하는 구조로 선회했습니다. 
+            그 결과, 호스팅 서버 비용을 월 0원으로 동결하면서도 사용자 기기 내에서 초고속으로 문서를 처리할 수 있는 구조를 완성했습니다.
+        </p>
+
+        <h3>2. 비즈니스 및 현금화 전략 (Monetization Strategy)</h3>
+        <p class="story-p">
+            트래픽이 몰리는 유틸리티 웹 서비스의 특성상 고정 지출(서버비)을 없애는 것이 수익 창출의 핵심입니다. 
+            본 구조는 서버 유지비가 전혀 들지 않기 때문에, 배너 광고나 제휴 링크 수익이 곧바로 순이익이 되는 구조를 갖추고 있습니다. 
+            초기 MVP 단계부터 불필요한 인프라 투자를 차단하고 즉시 현금화 파이프라인을 구축할 수 있는 가장 모범적인 웹 서비스 구현 사례입니다.
+        </p>
     </section>
 
     <!-- AD 2: 나두Ai 광고 -->
@@ -246,9 +259,8 @@
         <p>나두 PDF 변환기 · 브라우저 독립형 웹 서비스</p>
     </footer>
 
-    <!-- 브라우저 전용 PDF 처리 자바스크립트 로직 -->
+    <!-- 자바스크립트 로직 -->
     <script>
-        // 파일 선택 UI 바인딩
         function setupFileInput(inputId, spanId) {
             const input = document.getElementById(inputId);
             const span = document.getElementById(spanId);
@@ -271,10 +283,9 @@
         window.addEventListener('DOMContentLoaded', () => {
             setupFileInput('mergeFile', 'mergeFileName');
             setupFileInput('splitFile', 'splitFileName');
-            setupFileInput('compressFile', 'compressFileName');
         });
 
-        // 1. PDF 합치기 기능
+        // 1. PDF 합치기 (완료 시점에만 메시지 출력)
         async function handleMerge() {
             const fileInput = document.getElementById('mergeFile');
             if (!fileInput.files || fileInput.files.length < 2) {
@@ -283,25 +294,27 @@
             }
 
             try {
-                alert("파일을 병합 중입니다. 잠시만 기다려주세요.");
                 const mergedPdf = await PDFLib.PDFDocument.create();
 
                 for (let file of fileInput.files) {
                     const arrayBuffer = await file.arrayBuffer();
                     const pdf = await PDFLib.PDFDocument.load(arrayBuffer);
-                    const copiedPages = await mergedPdf.copyPages(pdf, pdf.getgetPageIndices ? pdf.getgetPageIndices() : Array.from({length: pdf.getPageCount()}, (_, i) => i));
+                    const copiedPages = await mergedPdf.copyPages(pdf, pdf.getPageIndices());
                     copiedPages.forEach((page) => mergedPdf.addPage(page));
                 }
 
                 const mergedPdfFileBytes = await mergedPdf.save();
                 downloadFile(mergedPdfFileBytes, "merged_document.pdf", "application/pdf");
+                
+                // 완료 메시지
+                alert("PDF 합치기가 완료되어 파일이 다운로드되었습니다!");
             } catch (error) {
                 console.error(error);
                 alert("PDF 합치기 중 오류가 발생했습니다.");
             }
         }
 
-        // 2. PDF 나누기 (첫 페이지 추출) 기능
+        // 2. PDF 나누기 (완료 시점에만 메시지 출력)
         async function handleSplit() {
             const fileInput = document.getElementById('splitFile');
             if (!fileInput.files || fileInput.files.length === 0) {
@@ -310,42 +323,26 @@
             }
 
             try {
-                alert("첫 페이지를 추출 중입니다.");
                 const file = fileInput.files[0];
                 const arrayBuffer = await file.arrayBuffer();
                 const pdf = await PDFLib.PDFDocument.load(arrayBuffer);
+                const totalPages = pdf.getPageCount();
 
-                const subPdf = await PDFLib.PDFDocument.create();
-                const [firstPage] = await subPdf.copyPages(pdf, [0]);
-                subPdf.addPage(firstPage);
+                // 각 페이지별로 루프를 돌며 개별 PDF 생성 후 다운로드
+                for (let i = 0; i < totalPages; i++) {
+                    const subPdf = await PDFLib.PDFDocument.create();
+                    const [copiedPage] = await subPdf.copyPages(pdf, [i]);
+                    subPdf.addPage(copiedPage);
 
-                const pdfBytes = await subPdf.save();
-                downloadFile(pdfBytes, "split_first_page.pdf", "application/pdf");
+                    const pdfBytes = await subPdf.save();
+                    downloadFile(pdfBytes, `split_page_${i + 1}.pdf`, "application/pdf");
+                }
+
+                // 완료 메시지
+                alert(`총 ${totalPages}개 페이지로 분할이 완료되어 다운로드가 시작되었습니다!`);
             } catch (error) {
                 console.error(error);
                 alert("PDF 나누기 중 오류가 발생했습니다.");
-            }
-        }
-
-        // 3. PDF 최적화/다운로드 기능
-        async function handleCompress() {
-            const fileInput = document.getElementById('compressFile');
-            if (!fileInput.files || fileInput.files.length === 0) {
-                alert("최적화할 PDF 파일을 선택해주세요.");
-                return;
-            }
-
-            try {
-                alert("파일을 최적화하는 중입니다.");
-                const file = fileInput.files[0];
-                const arrayBuffer = await file.arrayBuffer();
-                const pdf = await PDFLib.PDFDocument.load(arrayBuffer);
-                const pdfBytes = await pdf.save();
-                
-                downloadFile(pdfBytes, "optimized_document.pdf", "application/pdf");
-            } catch (error) {
-                console.error(error);
-                alert("PDF 처리 중 오류가 발생했습니다.");
             }
         }
 
@@ -358,7 +355,6 @@
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
-            alert("처리가 완료되어 파일이 다운로드되었습니다.");
         }
     </script>
 </body>
