@@ -1,0 +1,32 @@
+{
+  "ads": [
+    {
+      "id": 1,
+      "name": "아브아르 (AVOIR)",
+      "description": "트렌디한 감성의 여성의류 쇼핑몰",
+      "url": "https://avoir24.com/",
+      "tag": "추천 쇼핑"
+    },
+    {
+      "id": 2,
+      "name": "나두Ai",
+      "description": "오늘의 AI 나도 써본다! 최신 AI 툴 모음",
+      "url": "https://ai-tools-site-tqbh.vercel.app/",
+      "tag": "AI 트렌드"
+    },
+    {
+      "id": 3,
+      "name": "그날의 남녀",
+      "description": "우리의 특별한 사랑을 기록하는 공간",
+      "url": "https://couple-score.vercel.app/",
+      "tag": "커플/라이프"
+    },
+    {
+      "id": 4,
+      "name": "피드스캔Ai",
+      "description": "AI로 돈 버는 사람들, 스마트한 수익화 팁",
+      "url": "https://aimoneyscanner.vercel.app/",
+      "tag": "수익화/부업"
+    }
+  ]
+}

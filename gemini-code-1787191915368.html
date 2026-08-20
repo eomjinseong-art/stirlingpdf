@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stirling-PDF 오픈소스 가이드 & 무료 온라인 PDF 툴</title>
+    <meta name="description" content="오픈소스 Stirling-PDF 소개와 무료 PDF 합치기, 용량 줄이기, 변환 기능을 제공하는 스마트 포털">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --bg-color: #f8f9fa;
+            --card-bg: #ffffff;
+            --text-main: #1f2937;
+            --text-sub: #4b5563;
+            --border-color: #e5e7eb;
+        }
+        * { box-sizing: border-box; }
+        body { font-family: 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif; margin: 0; padding: 0; background-color: var(--bg-color); color: var(--text-main); line-height: 1.6; }
+        
+        /* 헤더 */
+        header { background: var(--card-bg); padding: 15px 40px; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; }
+        .logo { font-size: 20px; font-weight: bold; color: var(--primary); text-decoration: none; }
+        .nav-links a { margin-left: 20px; text-decoration: none; color: var(--text-sub); font-size: 14px; font-weight: 500; }
+        .nav-links a:hover { color: var(--primary); }
+
+        /* 컨테이너 */
+        .container { max-width: 1100px; margin: 40px auto; padding: 0 20px; }
+
+        /* 히어로 섹션 */
+        .hero { text-align: center; margin-bottom: 50px; }
+        .hero h1 { font-size: 34px; margin-bottom: 15px; color: #111; font-weight: 800; }
+        .hero p { font-size: 16px; color: var(--text-sub); margin-bottom: 25px; }
+        .cta-btn { background: var(--primary); color: white; padding: 12px 28px; border-radius: 6px; text-decoration: none; font-weight: bold; display: inline-block; transition: background 0.2s; }
+        .cta-btn:hover { background: var(--primary-dark); }
+
+        /* 파트너/광고 섹션 (Grid) */
+        .ads-section { margin: 40px 0; }
+        .ads-section h3 { font-size: 18px; margin-bottom: 15px; color: var(--text-main); display: flex; align-items: center; gap: 8px; }
+        .ads-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 15px; }
+        .ad-card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 8px; padding: 18px; text-decoration: none; color: inherit; transition: transform 0.2s, box-shadow 0.2s; position: relative; overflow: hidden; }
+        .ad-card:hover { transform: translateY(-3px); box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05); border-color: var(--primary); }
+        .ad-tag { display: inline-block; font-size: 11px; background: #eff6ff; color: var(--primary); padding: 3px 8px; border-radius: 4px; font-weight: bold; margin-bottom: 8px; }
+        .ad-card h4 { margin: 0 0 6px 0; font-size: 16px; color: var(--text-main); }
+        .ad-card p { margin: 0; font-size: 13px; color: var(--text-sub); }
+
+        /* 튜토리얼 / 블로그 섹션 */
+        .blog-section { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 35px; margin-bottom: 50px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02); }
+        .blog-section h2 { font-size: 22px; color: var(--text-main); margin-top: 0; border-bottom: 2px solid var(--border-color); padding-bottom: 12px; }
+        .blog-section h3 { font-size: 17px; color: var(--primary); margin-top: 25px; }
+        .blog-section p { font-size: 14px; color: var(--text-sub); line-height: 1.7; }
+        .code-box { background: #1e1e24; color: #d4d4d4; padding: 12px 18px; border-radius: 6px; font-family: monospace; font-size: 13px; margin: 10px 0; overflow-x: auto; }
+
+        /* 라이브 툴 체험 섹션 (iframe) */
+        .tool-section { margin-top: 40px; }
+        .tool-wrapper { background: var(--card-bg); border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); overflow: hidden; border: 1px solid var(--border-color); }
+        iframe { width: 100%; height: 800px; border: none; display: block; }
+
+        /* 푸터 */
+        footer { text-align: center; padding: 40px; color: #9ca3af; font-size: 13px; border-top: 1px solid var(--border-color); margin-top: 60px; }
+    </style>
+</head>
+<body>
+
+    <!-- 헤더 -->
+    <header>
+        <a href="#" class="logo">📄 Stirling-PDF Hub</a>
+        <nav class="nav-links">
+            <a href="#about">소개 및 튜토리얼</a>
+            <a href="#tools">PDF 툴 사용하기</a>
+            <a href="#sponsor">추천 사이트</a>
+        </nav>
+    </header>
+
+    <div class="container">
+        
+        <!-- 히어로 섹션 -->
+        <section class="hero">
+            <h1>가장 안전한 오픈소스 PDF 플랫폼</h1>
+            <p>설치 프로그램 없이 웹에서 즉시 PDF를 합치고, 변환하며, 나만의 서비스 구축 가이드까지 확인하세요.</p>
+            <a href="#tools" class="cta-btn">무료 PDF 툴 바로 쓰기 ↓</a>
+        </section>
+
+        <!-- 사용자 지정 광고/추천 사이트 그리드 (상단 배치) -->
+        <section class="ads-section" id="sponsor">
+            <h3>🔥 주목할 만한 추천 사이트 & 서비스</h3>
+            <div class="ads-grid" id="ads-container">
+                <!-- ads.json 에서 자바스크립트로 동적 로드됩니다 -->
+            </div>
+        </section>
+
+        <!-- 블로그 및 튜토리얼 섹션 (SEO & 애드센스 승인 최적화) -->
+        <section class="blog-section" id="about">
+            <h2>💡 Stirling-PDF란 무엇이고 어떻게 만들었나?</h2>
+            
+            <h3>1. Stirling-PDF 도입 배경</h3>
+            <p>문서 작업을 하다 보면 PDF 합치기, 용량 줄이기, 이미지 변환 등 다양한 기능이 필요합니다. 하지만 일반 무료 웹사이트들은 중요한 사내 문서나 개인정보가 외부 서버로 유출될 위험이 있습니다. 오픈소스인 <strong>Stirling-PDF</strong>는 모든 처리가 내 서버 안에서 이루어지므로 보안성이 완벽합니다.</p>
+
+            <h3>2. 서버 비용 0원으로 배포하는 아키텍처</h3>
+            <p>이 웹사이트는 프론트엔드 UI와 광고 영역을 <strong>Vercel</strong>에 배포하고, 실제 무거운 PDF 처리 엔진은 무료 클라우드 호스팅인 <strong>Render(Docker)</strong>에 올려 하이브리드 형태로 구성했습니다. 덕분에 서버 유지 비용이 전혀 들지 않습니다.</p>
+            <div class="code-box">Vercel (UI & 광고 영역) &lt;--- API / iframe ---&gt; Render (Stirling-PDF 엔진)</div>
+
+            <h3>3. 나만의 PDF 웹서비스 구축 팁</h3>
+            <p>누구나 깃허브 레포지토리에 코드를 올리고 Vercel과 연동하면 5분 만에 자신만의 도메인으로 PDF 포털을 오픈할 수 있습니다. 본 페이지처럼 광고 지면을 커스텀하여 부가적인 수익 파이프라인으로 확장하는 것도 가능합니다.</p>
+        </section>
+
+        <!-- 라이브 툴 체험 섹션 (Stirling-PDF iframe 연동) -->
+        <section class="tool-section" id="tools">
+            <div style="margin-bottom: 15px;">
+                <h2 style="margin:0; font-size:20px; color:var(--text-main);">🛠️ 실시간 온라인 PDF 변환 도구</h2>
+                <p style="margin:5px 0 0 0; font-size:13px; color:var(--text-sub);">아래 영역에서 원하시는 작업을 자유롭게 선택해서 이용하세요.</p>
+            </div>
+            <div class="tool-wrapper">
+                <!-- [주의] 아래의 src 주소를 본인의 Render 서버 주소로 변경하세요! -->
+                <iframe src="YOUR_RENDER_SERVER_URL"></iframe>
+            </div>
+        </section>
+
+    </div>
+
+    <footer>
+        &copy; 2026 Stirling-PDF Portal. All rights reserved.
+    </footer>
+
+    <!-- ads.json 데이터를 불러와서 카드 형태로 자동 렌더링하는 스크립트 -->
+    <script>
+        fetch('./ads.json')
+            .then(response => response.json())
+            .then(data => {
+                const container = document.getElementById('ads-container');
+                container.innerHTML = '';
+                data.ads.forEach(ad => {
+                    const card = document.createElement('a');
+                    card.href = ad.url;
+                    card.target = '_blank';
+                    card.className = 'ad-card';
+                    card.innerHTML = `
+                        <span class="ad-tag">${ad.tag}</span>
+                        <h4>${ad.name}</h4>
+                        <p>${ad.description}</p>
+                    `;
+                    container.appendChild(card);
+                });
+            })
+            .catch(error => {
+                console.error('광고 데이터를 불러오는 중 오류가 발생했습니다:', error);
+            });
+    </script>
+</body>
+</html>
