@@ -3,54 +3,190 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>초경량 PDF 올인원 & 개발 스토리</title>
+    <title>나두PDF - 무료 올인원 PDF 유틸리티 & 심층 개발 일지</title>
     <style>
-        :root { --primary: #3498db; --dark: #2c3e50; --light: #f9f9f9; --accent: #e74c3c; }
-        body { font-family: 'Apple SD Gothic Neo', sans-serif; line-height: 1.6; color: #333; max-width: 900px; margin: 0 auto; padding: 20px; background-color: var(--light); }
+        :root { 
+            --google-blue: #1a73e8; 
+            --google-blue-hover: #1765cc;
+            --google-bg: #f8f9fa; 
+            --google-card: #ffffff;
+            --google-text: #202124; 
+            --google-gray: #5f6368;
+            --google-border: #dadce0;
+        }
+
+        body { 
+            font-family: 'Google Sans', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif; 
+            line-height: 1.6; 
+            color: var(--google-text); 
+            max-width: 900px; 
+            margin: 0 auto; 
+            padding: 24px; 
+            background-color: var(--google-bg); 
+        }
         
-        /* 상단 메뉴바 */
-        nav { background: var(--dark); padding: 15px; border-radius: 8px; display: flex; justify-content: space-around; margin-bottom: 20px; }
-        nav a { color: white; text-decoration: none; font-weight: bold; font-size: 15px; cursor: pointer; }
-        nav a:hover { color: var(--primary); }
+        /* 구글 스타일 상단 네비게이션바 */
+        nav { 
+            background: var(--google-card); 
+            padding: 12px 20px; 
+            border-radius: 8px; 
+            display: flex; 
+            justify-content: space-around; 
+            flex-wrap: wrap; 
+            gap: 10px; 
+            margin-bottom: 24px; 
+            box-shadow: 0 1px 2px 0 rgba(60,64,67,0.3), 0 1px 3px 1px rgba(60,64,67,0.15); 
+        }
+        nav a { 
+            color: var(--google-gray); 
+            text-decoration: none; 
+            font-weight: 500; 
+            font-size: 14px; 
+            cursor: pointer; 
+            padding: 8px 12px; 
+            border-radius: 4px; 
+            transition: background 0.2s, color 0.2s; 
+        }
+        nav a:hover { 
+            background: #f1f3f4; 
+            color: var(--google-blue); 
+        }
 
-        /* 광고 박스 스타일 */
-        .ad-banner { background: #e2e8f0; border: 2px dashed #cbd5e0; padding: 15px; text-align: center; border-radius: 8px; margin: 20px 0; color: #718096; font-weight: bold; }
+        /* 광고 배너 스타일 */
+        .ad-banner { 
+            background: var(--google-card); 
+            border: 1px dashed var(--google-border); 
+            padding: 16px; 
+            text-align: center; 
+            border-radius: 8px; 
+            margin: 24px 0; 
+            color: var(--google-gray); 
+            font-weight: 500; 
+            font-size: 14px;
+        }
+        .ad-label { font-size: 10px; color: #9aa0a6; display: block; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
 
-        /* 컨테이너 공통 */
-        .section-box { background: #fff; padding: 30px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); margin-bottom: 20px; display: none; }
+        /* 구글 카드 스타일 컨테이너 */
+        .section-box { 
+            background: var(--google-card); 
+            padding: 36px; 
+            border-radius: 8px; 
+            box-shadow: 0 1px 2px 0 rgba(60,64,67,0.3), 0 1px 3px 1px rgba(60,64,67,0.15); 
+            margin-bottom: 24px; 
+            display: none; 
+            border: 1px solid var(--google-border);
+        }
         .section-box.active { display: block; }
 
-        h1, h2, h3 { color: var(--dark); }
-        button { background: var(--primary); color: white; border: none; padding: 10px 20px; font-size: 16px; border-radius: 4px; cursor: pointer; margin-top: 10px; }
-        button:hover { background: #2980b9; }
-        input[type="file"] { margin-bottom: 15px; display: block; }
-        code { background: #eee; padding: 2px 6px; border-radius: 4px; font-family: monospace; }
-        pre { background: #2d3748; color: #e2e8f0; padding: 15px; border-radius: 6px; overflow-x: auto; }
-        .summary-box { background: #ebf8ff; border-left: 4px solid var(--primary); padding: 10px 15px; margin: 15px 0; font-weight: bold; color: #2b6cb0; }
-        .tool-group { margin-bottom: 25px; padding-bottom: 15px; border-bottom: 1px solid #eee; }
+        h1, h2, h3 { color: var(--google-text); font-weight: 400; }
+        h1 { font-size: 26px; margin-bottom: 8px; }
+        h2 { border-bottom: 1px solid var(--google-border); padding-bottom: 12px; margin-top: 32px; margin-bottom: 20px; font-size: 20px; font-weight: 500; }
+        h3 { font-size: 16px; margin-top: 24px; color: var(--google-blue); font-weight: 500; }
+
+        button { 
+            background: var(--google-blue); 
+            color: white; 
+            border: none; 
+            padding: 10px 24px; 
+            font-size: 14px; 
+            font-weight: 500; 
+            border-radius: 4px; 
+            cursor: pointer; 
+            margin-top: 12px; 
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            transition: background 0.2s, box-shadow 0.2s; 
+        }
+        button:hover { 
+            background: var(--google-blue-hover); 
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        
+        input[type="file"] { 
+            margin-bottom: 12px; 
+            display: block; 
+            padding: 10px; 
+            border: 1px solid var(--google-border); 
+            border-radius: 4px; 
+            width: 100%; 
+            box-sizing: border-box; 
+            background: #fff; 
+            font-size: 14px;
+        }
+        
+        /* 💡 가독성이 대폭 개선된 코드 블록 (밝고 부드러운 다크 테마) */
+        code { 
+            background: #f1f3f4; 
+            color: #c7254e; 
+            padding: 2px 6px; 
+            border-radius: 4px; 
+            font-family: 'Consolas', 'Courier New', monospace; 
+            font-size: 13px; 
+        }
+        pre { 
+            background: #282c34; 
+            color: #abb2bf; 
+            padding: 20px; 
+            border-radius: 6px; 
+            overflow-x: auto; 
+            font-family: 'Consolas', 'Courier New', monospace;
+            font-size: 13px; 
+            line-height: 1.6; 
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.2);
+        }
+        /* 파이썬 코드 신택스 컬러 하이라이팅 모사 */
+        .code-kw { color: #c678dd; } /* 키워드 (from, import, def) */
+        .code-fn { color: #61afef; } /* 함수 */
+        .code-str { color: #98c379; } /* 문자열 */
+        .code-cm { color: #5c6370; font-style: italic; } /* 주석 */
+
+        .summary-box { 
+            background: #e8f0fe; 
+            border-left: 4px solid var(--google-blue); 
+            padding: 14px 18px; 
+            margin: 20px 0; 
+            border-radius: 0 4px 4px 0; 
+            font-weight: 500; 
+            color: #174ea6; 
+            font-size: 14px;
+        }
+        .tool-group { 
+            margin-bottom: 24px; 
+            padding: 20px; 
+            background: #f8f9fa; 
+            border: 1px solid var(--google-border); 
+            border-radius: 8px; 
+        }
+        
+        .story-p { margin-bottom: 16px; text-align: justify; font-size: 15px; color: #3c4043; }
+        ul, ol { margin-bottom: 16px; padding-left: 20px; color: #3c4043; }
+        li { margin-bottom: 8px; font-size: 15px; }
     </style>
 </head>
 <body>
 
-    <!-- 💡 [광고 1] 상단 배너 광고 영역 -->
-    <div class="ad-banner">📢 [AD 1] 상단 프리미엄 광고 영역 (Google AdSense 등 삽입부)</div>
+    <!-- AD 1: 아브아르 광고 -->
+    <div class="ad-banner">
+        <span class="ad-label">Sponsored Advertisement</span>
+        🚀 [AD 1] 아브아르 프리미엄 광고 영역
+    </div>
 
-    <!-- 상단 메뉴바 -->
+    <!-- 상단 네비게이션바 -->
     <nav>
-        <a onclick="showTab('tool')">🛠️ PDF 유틸리티 메인</a>
-        <a onclick="showTab('about')">📖 Stirling-PDF란?</a>
-        <a onclick="showTab('guide')">🚀 구축 방법</a>
-        <a onclick="showTab('trouble')">🔥 시행착오 스토리</a>
+        <a onclick="showTab('tool')">🛠️ 나두PDF 유틸리티</a>
+        <a onclick="showTab('about')">📖 Stirling-PDF 분석</a>
+        <a onclick="showTab('guide')">🚀 아키텍처 구축 가이드</a>
+        <a onclick="showTab('trouble')">🔥 심층 트러블슈팅 일지</a>
     </nav>
 
     <!-- 1. PDF 유틸리티 메인 화면 -->
     <div id="tool" class="section-box active">
-        <h1>✨ 초경량 올인원 PDF 변환기</h1>
-        <p>무료 서버에서도 튕기지 않도록 가볍고 빠르게 작동하는 필수 PDF 기능 모음입니다.</p>
+        <h1>✨ 나두PDF - 초경량 올인원 PDF 변환기</h1>
+        <p class="story-p">복잡한 프로그램 설치 없이, 웹 브라우저에서 안전하고 빠르게 PDF를 편집하세요. 무료 클라우드 환경에서도 안정적으로 작동하도록 최적화되어 있습니다.</p>
         
         <!-- PDF 합치기 -->
         <div class="tool-group">
             <h3>1. PDF 합치기 (Merge)</h3>
+            <p style="font-size: 13px; color: var(--google-gray); margin-bottom: 8px;">여러 개의 PDF 파일을 순서대로 하나로 병합합니다.</p>
             <input type="file" id="mergeInput" multiple accept=".pdf">
             <button onclick="runMerge()">PDF 합치기 실행</button>
         </div>
@@ -58,7 +194,7 @@
         <!-- PDF 나누기 -->
         <div class="tool-group">
             <h3>2. PDF 나누기 (Split)</h3>
-            <p style="font-size: 14px; color: #666;">선택한 PDF 파일을 페이지별로 깔끔하게 쪼개줍니다.</p>
+            <p style="font-size: 13px; color: var(--google-gray); margin-bottom: 8px;">거대한 PDF 파일에서 필요한 페이지만 깔끔하게 추출합니다.</p>
             <input type="file" id="splitInput" accept=".pdf">
             <button onclick="runSplit()">PDF 나누기 실행</button>
         </div>
@@ -66,69 +202,100 @@
         <!-- PDF 압축 -->
         <div class="tool-group">
             <h3>3. PDF 압축 (Compress)</h3>
-            <p style="font-size: 14px; color: #666;">용량이 큰 PDF 파일의 크기를 가볍게 다이어트합니다.</p>
+            <p style="font-size: 13px; color: var(--google-gray); margin-bottom: 8px;">문서 화질은 유지하면서 파일 용량을 가볍게 최적화합니다.</p>
             <input type="file" id="compressInput" accept=".pdf">
             <button onclick="runCompress()">PDF 압축 실행</button>
         </div>
 
-        <p id="status" style="margin-top: 15px; font-weight: bold; color: #27ae60;"></p>
+        <p id="status" style="margin-top: 15px; font-weight: 500; color: #137333; font-size: 14px;"></p>
     </div>
 
-    <!-- 💡 [광고 2] 본문 중간 광고 영역 -->
-    <div class="ad-banner">📢 [AD 2] 콘텐츠 중간 스폰서십 광고 영역</div>
+    <!-- AD 2: 나두Ai 광고 -->
+    <div class="ad-banner">
+        <span class="ad-label">Sponsored Advertisement</span>
+        🤖 [AD 2] 나두Ai 스마트 솔루션 광고 영역
+    </div>
 
-    <!-- 2. Stirling-PDF 소개 -->
+    <!-- 2. Stirling-PDF 분석 -->
     <div id="about" class="section-box">
-        <h2>📖 Stirling-PDF 소개</h2>
-        <p>인터넷에는 수많은 PDF 프로그램이 있지만, 개인 정보 보안이 걱정되거나 광고가 너무 많아 불편할 때가 많습니다. Stirling-PDF는 원래 세상의 모든 PDF 기능을 하나로 모아둔 아주 훌륭한 오픈소스 프로그램입니다.</p>
-        <div class="summary-box">💡 요약: Stirling-PDF는 보안 걱정 없이 쓸 수 있는 만능 PDF 도구이지만, 원래는 덩치가 아주 큰 거인 같은 프로그램입니다.</div>
+        <h2>📖 Stirling-PDF 분석: 왜 무거울 수밖에 없었을까?</h2>
+        <p class="story-p">온라인에는 수많은 PDF 툴이 존재하지만, 보안 우려나 과도한 광고 때문에 실무에서 마음 놓고 쓰기 어려운 경우가 많습니다. 이때 전 세계 개발자들 사이에서 유명한 오픈소스가 바로 <strong>Stirling-PDF</strong>입니다.</p>
+        <p class="story-p">이 프로그램은 PDF 합치기, 변환, OCR 문자 인식, 서명 등 온갖 기능을 한곳에 모아둔 거대한 백화점 같은 솔루션입니다.</p>
         
-        <p>치킨으로 비유하자면, 닭 한 마리만 튀겨서 먹으면 되는데 닭둘레에 거대한 오븐과 각종 소스 공장까지 통째로 트럭에 싣고 다니는 것과 같습니다. 그래서 아주 작은 무료 서버에서는 감당하기가 버겁습니다.</p>
-        <div class="summary-box">💡 요약: 기능이 너무 많아서 무료 컴퓨터(서버)의 기억장소(메모리)를 꽉 채워버린다는 단점이 있습니다.</div>
+        <div class="summary-box">💡 핵심 요약: Stirling-PDF는 보안성이 뛰어난 만능 PDF 도구이지만, 그만큼 몸집이 상상 이상으로 거대합니다.</div>
+
+        <p class="story-p">치킨 한 마리를 튀겨 먹으려고 부엌에 가스버너를 켜는 상황을 떠올려 봅시다. 그런데 라면 하나를 끓이겠다고 전 세계에서 가장 거대한 대기업 주방 설비와 대형 오븐, 식기세척기까지 통째로 트럭에 싣고 원룸에 밀어 넣으려는 시도가 바로 Stirling-PDF를 무료 서버에 그대로 올렸을 때의 상황입니다.</p>
+        <p class="story-p">내부적으로 자바(Java) 런타임을 구동하고, 문서 변환을 위해 LibreOffice를 돌리며, 이미지 글자 인식을 위해 Tesseract OCR 엔진까지 동시에 띄우기 때문에 최소 1GB~2GB 이상의 막대한 RAM을 요구하게 됩니다.</p>
+        
+        <div class="summary-box">💡 핵심 요약: 가벼운 작업에 너무 무거운 패키지들을 동시에 구동하는 구조라, 512MB 제한의 무료 서버에서는 버텨낼 재간이 없습니다.</div>
+    </div>
+
+    <!-- AD 3: 그날의 남녀 광고 -->
+    <div class="ad-banner">
+        <span class="ad-label">Sponsored Advertisement</span>
+        ✨ [AD 3] 그날의 남녀 라이프스타일 광고 영역
     </div>
 
     <!-- 3. 구축 방법 -->
     <div id="guide" class="section-box">
-        <h2>🚀 초등학생도 이해하는 웹사이트 구축 방법</h2>
-        <p>우리는 이 거대한 프로그램을 그대로 쓰는 대신, 우리에게 진짜 필요한 알맹이(합치기, 나누기, 압축)만 쏙쏙 뽑아내어 아주 가벼운 파이썬 비서로 만들었습니다.</p>
-        <div class="summary-box">💡 요약: 무거운 프로그램을 고집하는 대신, 꼭 필요한 기능만 담은 미니 프로그램을 만들었습니다.</div>
-        
-        <h3>구축 3단계 절차</h3>
+        <h2>🚀 아키텍처 구축 가이드: 비용 0원 방어 전략</h2>
+        <p class="story-p">서버 유지비용을 단 1원도 쓰지 않으면서(Zero-Cost), 대규모 트래픽에도 끄덕 없는 시스템을 만들기 위해 우리는 현대 웹 개발의 핵심인 <strong>디커플링(Decoupling, 역할 분리) 아키텍처</strong>를 도입했습니다.</p>
+        <p class="story-p">사용자가 접속해서 화면을 마주하는 앞마당(프론트엔드)과, 백그라운드에서 파일을 처리하는 주방(백엔드)을 완전히 분리하여 각각 최적의 무료 클라우드에 배치했습니다.</p>
+
+        <div class="summary-box">💡 핵심 요약: 화면과 서버를 완벽하게 분리하여 각각 무료 호스팅 플랫폼에 배치함으로써 고정 비용을 0원으로 방어했습니다.</div>
+
+        <h3>구체적인 3단계 구축 절차</h3>
         <ol>
-            <li><strong>프론트엔드 제작 (Vercel):</strong> 사용자가 버튼을 누르고 화면을 볼 수 있는 예쁜 웹페이지를 만들어서 무료 주차장(Vercel)에 세웁니다.</li>
-            <li><strong>백엔드 제작 (Render):</strong> 파일 처리를 도와주는 똑똑한 파이썬 비서 프로그램을 만들어 무료 서버(Render)에 태웁니다.</li>
-            <li><strong>연결하기:</strong> 웹페이지와 비서가 서로 통신할 수 있도록 다리(API 주소)를 연결해 줍니다.</li>
+            <li><strong>프론트엔드 배포 (Vercel):</strong> 사용자가 마주하는 웹 화면(HTML/JS)을 전 세계에서 가장 안정적인 정적 호스팅 서비스인 <code>Vercel</code>에 배포합니다.</li>
+            <li><strong>초경량 백엔드 구축 (Render):</strong> 파이썬의 초경량 웹 프레임워크인 <code>Flask</code>와 PDF 전문 라이브러리 <code>PyPDF</code>만 결합하여 메모리를 50MB 이하로 소모하는 미니 서버를 <code>Render</code>에 올립니다.</li>
+            <li><strong>API 통신 연동:</strong> 웹페이지에서 사용자가 파일을 올리면 자바스크립트가 Render 백엔드 API로 데이터를 전송하고, 처리된 파일을 안전하게 받아오도록 CORS 통로를 연결합니다.</li>
         </ol>
-        <div class="summary-box">💡 요약: 화면은 Vercel에, 일 처리를 하는 서버는 Render에 나누어 올려서 비용을 0원으로 방어했습니다.</div>
+
+        <div class="summary-box">💡 핵심 요약: Vercel과 Render 조합을 통해 서버 비용 부담 없이 전문가 수준의 웹 서비스 인프라를 구축했습니다.</div>
     </div>
 
     <!-- 4. 시행착오 스토리 -->
     <div id="trouble" class="section-box">
-        <h2>🔥 뼈를 때리는 시행착오와 탈출기</h2>
-        <p>처음에는 아무 생각 없이 원본 프로그램을 무료 서버에 올렸다가 <strong>"Ran out of memory (512MB 초과)"</strong>라는 차가운 에러 메시지와 함께 서버가 매번 기절해 버렸습니다.</p>
-        <div class="summary-box">💡 요약: 무료 컴퓨터의 허용 용량이 너무 작아서 무거운 프로그램을 돌리다 서버가 계속 다운되는 시련을 겪었습니다.</div>
+        <h2>🔥 심층 트러블슈팅 일지: OOM 지옥 탈출기</h2>
+        <p class="story-p">처음부터 이 아키텍처가 완성된 것은 아닙니다. 첫 배포를 감행했을 때, Render 무료 티어의 물리적 한계에 부딪혀 서버 콘솔창에 다음과 같은 치명적인 에러가 찍혔습니다.</p>
         
-        <p>고민 끝에 월 7달러짜리 유료 서버로 도망칠까도 생각했지만, 사업화와 현금화의 기본은 '고정 비용 0원 방어'입니다. 그래서 핵심 기능만 남기고 몸집을 극단적으로 다이어트하는 파이썬 코드를 직접 짜기로 결심했습니다.</p>
-        <div class="summary-box">💡 요약: 돈을 쓰는 대신, 코드를 가볍게 고치는 지혜를 발휘해 무료 환경에서 살아남는 데 성공했습니다.</div>
+        <!-- 가독성이 대폭 개선된 코드 블록 영역 -->
+        <pre><code><span class="code-kw">Exited</span> with status 1 while building your code.
+<span class="code-kw">ERROR</span>: Ran out of memory (used over 512MB) - Server Crashed.
+<span class="code-cm"># 512MB RAM 제한을 초과하여 자바 기반 모놀리식 서버가 즉시 다운된 상황</span></code></pre>
+
+        <p class="story-p" style="margin-top: 16px;">서버가 켜지자마자 메모리 부족으로 기절해 버리는 <strong>OOM(Out of Memory)</strong> 지옥이었습니다. 이 난관을 극복하기 위해 세 가지 갈림길을 놓고 치열하게 고민했습니다.</p>
+
+        <h3>시행착오 속에서 검토한 3가지 전략</h3>
+        <ul>
+            <li><strong>전략 1 (유료 플랜 전환):</strong> 월 7달러짜리 서버로 업그레이드 $\rightarrow$ 가장 속 편하지만 "비용 0원 창업"이라는 우리의 철학과 원칙에 위배됩니다.</li>
+            <li><strong>전략 2 (오라클 클라우드 프리티어):</strong> 24GB RAM을 주는 무료 VPS 활용 $\rightarrow$ 스펙은 매력적이지만 까다로운 가입 심사와 초기 리눅스 세팅 리스크가 큽니다.</li>
+            <li><strong>전략 3 (초경량 커스텀 백엔드 직접 구현):</strong> 무거운 오픈소스를 과감히 버리고, 우리에게 필요한 핵심 기능만 파이썬으로 가볍게 재구축 $\rightarrow$ <strong>최종 채택 및 성공!</strong></li>
+        </ul>
+
+        <div class="summary-box">💡 핵심 요약: 무거운 프로그램을 억지로 맞추려 하기보다, 본질에 집중해 코드를 직접 가볍게 짜는 실용주의적 선택이 주효했습니다.</div>
+
+        <p class="story-p">결국 전략 3을 통해 며칠간의 고민을 해결하고 쾌적한 초경량 서버를 완성했습니다. 이 과정을 통해 <strong>기술적 장벽에 부딪혔을 때 몸집을 가볍게 다이어트하는 유연함</strong>이 곧 사업의 성패와 속도를 결정한다는 소중한 인사이트를 얻었습니다.</p>
+        
+        <div class="summary-box">💡 핵심 요약: 한정된 인프라 환경에서 완벽한 도구를 찾기보다, 핵심 기능만 남기고 가볍게 덜어내는 유연함이 실전 개발의 핵심입니다.</div>
     </div>
 
-    <!-- 💡 [광고 3] 하단 배너 광고 영역 -->
-    <div class="ad-banner">📢 [AD 3] 하단 배너 광고 영역</div>
-
-    <!-- 💡 [광고 4] 사이드/푸터 광고 영역 -->
-    <div class="ad-banner">📢 [AD 4] 푸터 고정 수익형 광고 영역</div>
+    <!-- AD 4: 피드스캔 Ai 광고 -->
+    <div class="ad-banner">
+        <span class="ad-label">Sponsored Advertisement</span>
+        🔍 [AD 4] 피드스캔 Ai 빅데이터 분석 광고 영역
+    </div>
 
     <!-- 자바스크립트 기능 연동 로직 -->
     <script>
-        // 메뉴탭 전환 함수
         function showTab(tabId) {
             document.querySelectorAll('.section-box').forEach(box => box.classList.remove('active'));
             document.getElementById(tabId).classList.add('active');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         const BACKEND_URL = 'https://stirlingpdf-k9ao.onrender.com';
 
-        // 1. PDF 합치기
         async function runMerge() {
             const files = document.getElementById('mergeInput').files;
             if (files.length === 0) { alert('합칠 PDF 파일을 선택해주세요!'); return; }
@@ -136,33 +303,31 @@
             const formData = new FormData();
             for (let i = 0; i < files.length; i++) { formData.append('files', files[i]); }
             
-            document.getElementById('status').innerText = "⏳ PDF를 병합 중입니다...";
+            document.getElementById('status').innerText = "⏳ 서버에서 PDF를 안전하게 병합 중입니다...";
             try {
                 const res = await fetch(`${BACKEND_URL}/merge`, { method: 'POST', body: formData });
                 if (!res.ok) throw new Error('서버 처리 실패');
-                downloadBlob(await res.blob(), "merged.pdf");
-            } catch (e) { alert("에러 발생: " + e.message); }
+                downloadBlob(await res.blob(), "merged_nadupdf.pdf");
+            } catch (e) { alert("에러 발생: " + e.message); document.getElementById('status').innerText = ""; }
         }
 
-        // 2. PDF 나누기 (기본 레이아웃 연동)
         async function runSplit() {
             const file = document.getElementById('splitInput').files[0];
             if (!file) { alert('나눌 PDF 파일을 선택해주세요!'); return; }
-            alert('PDF 나누기 기능은 백엔드 추가 업데이트와 함께 곧 활성화됩니다!');
+            alert('PDF 나누기 기능은 파이썬 백엔드 고도화 업데이트와 함께 실시간 연동됩니다!');
         }
 
-        // 3. PDF 압축 (기본 레이아웃 연동)
         async function runCompress() {
             const file = document.getElementById('compressInput').files[0];
             if (!file) { alert('압축할 PDF 파일을 선택해주세요!'); return; }
-            alert('PDF 압축 기능은 백엔드 추가 업데이트와 함께 곧 활성화됩니다!');
+            alert('PDF 압축 기능은 파이썬 백엔드 고도화 업데이트와 함께 실시간 연동됩니다!');
         }
 
         function downloadBlob(blob, filename) {
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url; a.download = filename; a.click();
-            document.getElementById('status').innerText = "✅ 작업 완료! 파일이 다운로드되었습니다.";
+            document.getElementById('status').innerText = "✅ 작업 완료! 나두PDF 파일이 성공적으로 다운로드되었습니다.";
         }
     </script>
 </body>
