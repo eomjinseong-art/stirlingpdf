@@ -276,12 +276,10 @@
         <p>나두 PDF 변환기 · Stirling PDF 셀프 호스팅 구축 기록</p>
     </footer>
 
-    <!-- 자바스크립트 연동 로직 -->
+    <!-- 자바스크립트 연동 로직 (404 오류 방지형 메인 주소 연결) -->
     <script>
-        // 사용자가 제공해주신 Vercel 배포 주소 반영
         const STIRLING_PDF_URL = "https://stirlingpdf-one.vercel.app/";
 
-        // 파일 선택 시 이름 표시 함수
         function setupFileInput(inputId, spanId) {
             const input = document.getElementById(inputId);
             const span = document.getElementById(spanId);
@@ -307,7 +305,6 @@
             setupFileInput('compressFile', 'compressFileName');
         });
 
-        // PDF 기능 실행 함수
         function handlePdfAction(actionType) {
             let fileInputId = "";
             if (actionType === 'merge') fileInputId = 'mergeFile';
@@ -321,13 +318,9 @@
                 return;
             }
 
-            let targetPath = "";
-            if (actionType === 'merge') targetPath = "merge-pdfs";
-            else if (actionType === 'split') targetPath = "split-pages";
-            else if (actionType === 'compress') targetPath = "compress-pdf";
-
-            alert("Stirling PDF 서비스로 이동합니다.");
-            window.open(`${STIRLING_PDF_URL.replace(/\/$/, "")}/${targetPath}`, "_blank");
+            alert("Stirling PDF 메인 페이지로 이동합니다.");
+            // 404 오류를 방지하기 위해 유효한 메인 주소로 연결
+            window.open(STIRLING_PDF_URL, "_blank");
         }
     </script>
 </body>
