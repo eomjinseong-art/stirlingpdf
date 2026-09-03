@@ -1,640 +1,688 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>나두 PDF 변환기 - 브라우저에서 바로 실행되는 무료 PDF 유틸리티</title>
-    <!-- 브라우저 전용 PDF 처리 라이브러리 (pdf-lib) 로드 -->
-    <script src="https://unpkg.com/pdf-lib@1.4.0/dist/pdf-lib.min.js"></script>
-    <style>
-        :root { 
-            --google-blue: #1a73e8; 
-            --google-blue-hover: #1765cc;
-            --google-bg: #f8f9fa; 
-            --google-card: #ffffff;
-            --google-text: #202124; 
-            --google-gray: #5f6368;
-            --google-border: #dadce0;
-        }
-
-        body { 
-            font-family: 'Google Sans', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif; 
-            line-height: 1.7; 
-            color: var(--google-text); 
-            max-width: 950px; 
-            margin: 0 auto; 
-            padding: 24px; 
-            background-color: var(--google-bg); 
-        }
-        
-        /* 상단 네비게이션바 */
-        nav { 
-            background: var(--google-card); 
-            padding: 12px 20px; 
-            border-radius: 8px; 
-            display: flex; 
-            justify-content: space-around; 
-            flex-wrap: wrap; 
-            gap: 10px; 
-            margin-bottom: 24px; 
-            box-shadow: 0 1px 2px 0 rgba(60,64,67,0.3), 0 1px 3px 1px rgba(60,64,67,0.15); 
-        }
-        nav a { 
-            color: var(--google-gray); 
-            text-decoration: none; 
-            font-weight: 500; 
-            font-size: 14px; 
-            cursor: pointer; 
-            padding: 8px 12px; 
-            border-radius: 4px; 
-            transition: background 0.2s, color 0.2s; 
-        }
-        nav a:hover { 
-            background: #f1f3f4; 
-            color: var(--google-blue); 
-        }
-
-        /* 광고 카드 스타일 */
-        .ad-card {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 18px;
-            padding: 20px 24px;
-            background: var(--google-card);
-            border: 1px solid var(--google-border);
-            border-radius: 8px;
-            color: var(--google-text);
-            text-decoration: none;
-            margin: 24px 0;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.02);
-            transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
-        }
-        .ad-card:hover {
-            transform: translateY(-2px);
-            border-color: var(--google-blue);
-            box-shadow: 0 4px 12px rgba(60,64,67,0.1);
-        }
-        .ad-copy { display: flex; align-items: center; gap: 16px; }
-        .ad-icon { width: 44px; height: 44px; flex: 0 0 44px; display: grid; place-items: center; border-radius: 8px; background: #e8f0fe; color: var(--google-blue); font-weight: 700; font-size: 16px; }
-        .ad-text strong { display: block; margin-bottom: 2px; font-size: 16px; color: var(--google-text); }
-        .ad-text p { margin: 0; color: var(--google-gray); font-size: 13px; }
-        .ad-disclosure { display: block; margin-bottom: 2px; color: #9aa0a6; font-size: 9px; letter-spacing: 1px; text-transform: uppercase; }
-        .ad-arrow { color: var(--google-blue); font-size: 18px; font-weight: bold; }
-
-        /* 섹션 컨테이너 */
-        .section-box { 
-            background: var(--google-card); 
-            padding: 40px; 
-            border-radius: 8px; 
-            box-shadow: 0 1px 2px 0 rgba(60,64,67,0.3), 0 1px 3px 1px rgba(60,64,67,0.15); 
-            margin-bottom: 24px; 
-            border: 1px solid var(--google-border);
-        }
-
-        h1, h2, h3, h4 { color: var(--google-text); font-weight: 400; }
-        h1 { font-size: 28px; margin-bottom: 12px; }
-        h2 { border-bottom: 1px solid var(--google-border); padding-bottom: 12px; margin-top: 36px; margin-bottom: 20px; font-size: 20px; font-weight: 500; }
-        h3 { font-size: 16px; margin-top: 24px; color: var(--google-blue); font-weight: 500; }
-        
-        blockquote {
-            border-left: 4px solid var(--google-blue);
-            margin: 0 0 20px 0;
-            padding: 12px 20px;
-            background: #f8f9fa;
-            color: var(--google-gray);
-            font-style: italic;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 20px 0;
-        }
-        th, td {
-            border: 1px solid var(--google-border);
-            padding: 12px;
-            text-align: left;
-            font-size: 14px;
-        }
-        th {
-            background: #f1f3f4;
-            font-weight: 500;
-        }
-
-        pre {
-            background: #202124;
-            color: #f8f9fa;
-            padding: 16px;
-            border-radius: 6px;
-            overflow-x: auto;
-            font-family: 'Courier New', Courier, monospace;
-            font-size: 13px;
-        }
-
-        button { 
-            background: var(--google-blue); 
-            color: white; 
-            border: none; 
-            padding: 10px 20px; 
-            font-size: 14px; 
-            font-weight: 500; 
-            border-radius: 4px; 
-            cursor: pointer; 
-            transition: background 0.2s; 
-        }
-        button:hover { background: var(--google-blue-hover); }
-
-        .story-p { margin-bottom: 16px; text-align: justify; font-size: 15px; color: #3c4043; }
-
-        /* PDF 기능 카드 스타일 */
-        .pdf-func-card {
-            background: #ffffff;
-            border: 1px solid var(--google-border);
-            border-radius: 8px;
-            padding: 24px;
-            margin-bottom: 20px;
-        }
-        .pdf-func-card h3 {
-            margin-top: 0;
-            color: var(--google-blue);
-            font-size: 18px;
-        }
-        .file-input-box {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin: 16px 0;
-            padding: 12px;
-            background: #f8f9fa;
-            border: 1px solid var(--google-border);
-            border-radius: 4px;
-        }
-        .file-name-display {
-            color: var(--google-gray);
-            font-size: 14px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-        .file-upload-label {
-            background: #f1f3f4;
-            color: var(--google-text);
-            border: 1px solid var(--google-border);
-            padding: 8px 16px;
-            font-size: 14px;
-            font-weight: 500;
-            border-radius: 4px;
-            cursor: pointer;
-            display: inline-block;
-            transition: background 0.2s;
-        }
-        .file-upload-label:hover {
-            background: #e8eaed;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>나두 PDF 변환기</title>
+  <script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
+  <style>
+    :root {
+      --blue: #1a73e8;
+      --blue-hover: #1765cc;
+      --bg: #f8f9fa;
+      --card: #ffffff;
+      --text: #202124;
+      --gray: #5f6368;
+      --border: #dadce0;
+      --ok: #137333;
+      --ok-bg: #e6f4ea;
+      --err: #c5221f;
+      --err-bg: #fce8e6;
+      --info-bg: #e8f0fe;
+    }
+    * { box-sizing: border-box; }
+    body {
+      font-family: "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+      margin: 0;
+      color: var(--text);
+      background: var(--bg);
+      line-height: 1.5;
+    }
+    .wrap { max-width: 760px; margin: 0 auto; padding: 28px 20px 48px; }
+    header { margin-bottom: 20px; }
+    h1 { font-size: 26px; font-weight: 700; margin: 0 0 6px; }
+    .sub { margin: 0; color: var(--gray); font-size: 14px; }
+    .tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 20px 0;
+    }
+    .tabs button {
+      border: 1px solid var(--border);
+      background: var(--card);
+      color: var(--gray);
+      padding: 8px 14px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .tabs button.active {
+      background: var(--info-bg);
+      border-color: #aecbfa;
+      color: var(--blue);
+    }
+    .panel {
+      display: none;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+      box-shadow: 0 1px 2px rgba(60,64,67,.12);
+    }
+    .panel.active { display: block; }
+    h2 { margin: 0 0 6px; font-size: 18px; font-weight: 600; }
+    .hint { margin: 0 0 16px; color: var(--gray); font-size: 13px; }
+    .dropzone {
+      border: 1.5px dashed var(--border);
+      border-radius: 10px;
+      padding: 22px 16px;
+      text-align: center;
+      background: #f8f9fa;
+      cursor: pointer;
+      transition: border-color .15s, background .15s;
+    }
+    .dropzone.dragover {
+      border-color: var(--blue);
+      background: var(--info-bg);
+    }
+    .dropzone p { margin: 0 0 4px; font-weight: 600; }
+    .dropzone span { color: var(--gray); font-size: 13px; }
+    .file-list { display: flex; flex-direction: column; gap: 8px; margin: 14px 0; }
+    .file-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 8px;
+      align-items: center;
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: #fff;
+    }
+    .file-meta { min-width: 0; }
+    .file-meta strong {
+      display: block;
+      font-size: 13px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .file-meta small { color: var(--gray); font-size: 12px; }
+    .row-actions { display: flex; gap: 4px; }
+    .row-actions button, .ghost, .primary {
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .row-actions button, .ghost {
+      border: 1px solid var(--border);
+      background: #fff;
+      color: var(--text);
+      padding: 6px 10px;
+    }
+    .primary {
+      border: 0;
+      background: var(--blue);
+      color: #fff;
+      padding: 11px 16px;
+      width: 100%;
+      margin-top: 8px;
+    }
+    .primary:hover { background: var(--blue-hover); }
+    .primary:disabled, .row-actions button:disabled {
+      opacity: .55;
+      cursor: not-allowed;
+    }
+    .field { margin: 14px 0; }
+    .field label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px; }
+    .field input, .field select {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 14px;
+    }
+    .status {
+      margin-top: 12px;
+      padding: 10px 12px;
+      border-radius: 8px;
+      font-size: 13px;
+      display: none;
+    }
+    .status.info { display: block; background: var(--info-bg); color: #174ea6; }
+    .status.ok { display: block; background: var(--ok-bg); color: var(--ok); }
+    .status.err { display: block; background: var(--err-bg); color: var(--err); }
+    footer { margin-top: 24px; color: var(--gray); font-size: 12px; text-align: center; }
+    input[type="file"] { display: none; }
+  </style>
 </head>
 <body>
+  <div class="wrap">
+    <header>
+      <h1>나두 PDF 변환기</h1>
+      <p class="sub">이 PC 브라우저에서만 처리합니다. 파일은 서버로 전송되지 않습니다. 파일당 80MB, 합치기 합계 150MB까지.</p>
+    </header>
 
-    <!-- AD 1: 아브아르 광고 -->
-    <a class="ad-card" href="https://avoir24.com/" target="_blank" rel="sponsored noopener">
-        <div class="ad-copy">
-            <span class="ad-icon">A</span>
-            <div class="ad-text">
-                <small class="ad-disclosure">ADVERTISEMENT</small>
-                <strong>아브아르 (AVOIR)</strong>
-                <p>트렌디한 감성의 여성의류 쇼핑몰 바로가기</p>
-            </div>
-        </div>
-        <span class="ad-arrow">→</span>
-    </a>
-
-    <!-- 상단 네비게이션바 -->
-    <nav>
-        <a href="#tool">🛠️ PDF 도구</a>
-        <a href="#guide">📖 구축기 본문</a>
+    <nav class="tabs" aria-label="도구 선택">
+      <button type="button" class="active" data-tool="merge">합치기</button>
+      <button type="button" data-tool="split">나누기</button>
+      <button type="button" data-tool="extract">페이지 추출</button>
+      <button type="button" data-tool="rotate">회전</button>
+      <button type="button" data-tool="images">이미지 → PDF</button>
     </nav>
 
-    <!-- 머리말 영역 -->
-    <section class="section-box">
-        <h1>나두 PDF 변환기 - 브라우저에서 바로 실행되는 무료 PDF 유틸리티</h1>
-        <p style="color: var(--google-gray); font-style: italic; margin-bottom: 16px;">서버 비용 0원, 개인정보 유출 걱정 없는 클라이언트 사이드 PDF 처리</p>
-        <p class="story-p">별도의 복잡한 백엔드 서버 없이 브라우저 안에서 안전하고 빠르게 PDF를 병합하고 분할할 수 있습니다.</p>
+    <section class="panel active" id="panel-merge">
+      <h2>PDF 합치기</h2>
+      <p class="hint">여러 PDF를 올린 뒤 순서를 바꾸고 하나로 합칩니다.</p>
+      <div class="dropzone" id="mergeDrop" data-input="mergeInput">
+        <p>여기에 PDF를 놓거나 클릭해서 선택</p>
+        <span>PDF만, 2개 이상</span>
+      </div>
+      <input id="mergeInput" type="file" accept=".pdf,application/pdf" multiple>
+      <div class="file-list" id="mergeList"></div>
+      <button type="button" class="primary" id="mergeBtn">합쳐서 다운로드</button>
+      <div class="status" id="mergeStatus"></div>
     </section>
 
-    <!-- PDF 변환 기능 UI 영역 -->
-    <section id="tool" class="section-box">
-        <h2>✨ 핵심 PDF 유틸리티 (브라우저 자체 실행)</h2>
-        
-        <!-- 1. PDF 합치기 -->
-        <div class="pdf-func-card">
-            <h3>1. PDF 합치기 (Merge)</h3>
-            <p style="color: var(--google-gray); font-size: 14px; margin: 0;">여러 개의 PDF 파일을 순서대로 깔끔하게 하나로 병합합니다.</p>
-            <div class="file-input-box">
-                <label for="mergeFile" class="file-upload-label">파일 선택</label>
-                <input type="file" id="mergeFile" multiple accept=".pdf" style="display: none;">
-                <span id="mergeFileName" class="file-name-display">선택된 파일 없음</span>
-            </div>
-            <button onclick="handleMerge()">PDF 합치기 실행 및 다운로드</button>
-        </div>
-
-        <!-- 2. PDF 나누기 -->
-        <div class="pdf-func-card">
-            <h3>2. PDF 나누기 (모든 페이지 개별 파일로 쪼개기)</h3>
-            <p style="color: var(--google-gray); font-size: 14px; margin: 0;">PDF 파일의 모든 페이지를 낱장(각각의 독립된 PDF 파일)으로 완벽하게 분할합니다.</p>
-            <div class="file-input-box">
-                <label for="splitFile" class="file-upload-label">파일 선택</label>
-                <input type="file" id="splitFile" accept=".pdf" style="display: none;">
-                <span id="splitFileName" class="file-name-display">선택된 파일 없음</span>
-            </div>
-            <button onclick="handleSplit()">PDF 나누기 실행 및 전체 다운로드</button>
-        </div>
+    <section class="panel" id="panel-split">
+      <h2>PDF 나누기</h2>
+      <p class="hint">모든 페이지를 낱장 PDF로 나눈 뒤 ZIP 한 개로 받습니다.</p>
+      <div class="dropzone" id="splitDrop" data-input="splitInput">
+        <p>여기에 PDF를 놓거나 클릭해서 선택</p>
+        <span>PDF 1개</span>
+      </div>
+      <input id="splitInput" type="file" accept=".pdf,application/pdf">
+      <div class="file-list" id="splitList"></div>
+      <button type="button" class="primary" id="splitBtn">ZIP으로 나누기</button>
+      <div class="status" id="splitStatus"></div>
     </section>
 
-    <!-- AD 2: 나두Ai 광고 -->
-    <a class="ad-card" href="https://ai-tools-site-tqbh.vercel.app/" target="_blank" rel="sponsored noopener">
-        <div class="ad-copy">
-            <span class="ad-icon">AI</span>
-            <div class="ad-text">
-                <small class="ad-disclosure">ADVERTISEMENT</small>
-                <strong>나두Ai</strong>
-                <p>오늘의 AI 나도 써본다! 최신 AI 툴 모음 바로가기</p>
-            </div>
-        </div>
-        <span class="ad-arrow">→</span>
-    </a>
-
-    <!-- 대표님 작성 원문 블로그/구축기 전체 반영 섹션 -->
-    <section id="guide" class="section-box">
-        <h1>Stirling PDF를 내 웹사이트 안에 넣기까지</h1>
-        <blockquote>직접 만들고 부딪혀 본 셀프 호스팅 기록</blockquote>
-        
-        <p class="story-p">GitHub와 Vercel만 사용하던 초보자의 관점에서, 왜 별도 서버가 필요했는지부터 Docker 설치, iframe 연결, 보안 설정, 광고 배치와 오류 해결까지 하나씩 풀어 쓴 구축기입니다.</p>
-        
-        <ul style="color: var(--google-gray); font-size: 14px; margin-bottom: 30px;">
-            <li>작성일: 2026년 8월 20일</li>
-            <li>예상 읽기 시간: 18분</li>
-            <li>난이도: 초급–중급</li>
-        </ul>
-
-        <hr style="border: 0; border-top: 1px solid var(--google-border); margin: 30px 0;">
-
-        <h2>1. 먼저, Stirling PDF가 무엇인지부터</h2>
-        <p class="story-p">Stirling PDF는 PDF 합치기, 나누기, 페이지 회전, 압축, 이미지 변환, OCR 같은 여러 문서 작업을 브라우저 화면에서 수행할 수 있게 만든 오픈소스 PDF 처리 애플리케이션입니다. 중요한 점은 “웹페이지 소스 몇 줄”이 아니라는 사실입니다. 화면 뒤에서 Java 애플리케이션과 LibreOffice, Tesseract 같은 도구가 실제 파일을 처리합니다.</p>
-        <p class="story-p">따라서 일반적인 HTML 사이트처럼 GitHub에 올리고 Vercel에 연결하는 것만으로는 전체 기능이 실행되지 않습니다. Vercel은 소개 페이지와 광고, 블로그 글을 보여주는 프론트엔드 역할에 잘 맞고, Stirling PDF는 Docker 컨테이너를 계속 실행할 수 있는 별도 서버가 담당해야 합니다.</p>
-        
-        <p style="font-weight: 500; color: var(--google-text);">한 문장으로 정리하면</p>
-        <p class="story-p">Vercel은 사용자가 보는 “가게”, Stirling PDF 서버는 문서를 실제로 처리하는 “작업장”입니다.</p>
-
-        <h3>어떤 작업에 유용할까?</h3>
-        <ul style="margin-bottom: 20px; color: #3c4043; font-size: 15px;">
-            <li>여러 계약서나 스캔본을 하나의 PDF로 합치기</li>
-            <li>필요한 페이지만 분리하거나 순서를 바꾸기</li>
-            <li>용량이 큰 PDF를 압축해 이메일 첨부 크기 줄이기</li>
-            <li>이미지로 된 문서에 OCR을 적용해 검색 가능한 PDF 만들기</li>
-            <li>워드·이미지 등 다른 형식과 PDF 사이를 변환하기</li>
-            <li>암호 설정, 워터마크, 메타데이터 정리 등 반복 작업 줄이기</li>
-        </ul>
-
-        <p style="font-weight: 500; color: var(--google-text);">기능은 이미지 종류에 따라 다릅니다.</p>
-        <p class="story-p">공식 Docker 이미지는 Standard, Fat, Ultra-Lite처럼 구성이 다릅니다. OCR·폰트·문서 변환이 중요하다면 무조건 가장 작은 이미지부터 선택하지 말고 필요한 기능과 서버 자원을 함께 비교해야 합니다.</p>
-
-        <h2>2. 제가 선택한 구조: 화면과 처리 서버 분리</h2>
-        <p class="story-p">처음에는 index.html 안에 Stirling PDF 파일을 넣으면 끝날 것이라고 생각하기 쉽습니다. 실제로는 두 개의 배포물이 서로 역할을 나눕니다. 사용자는 내 도메인으로 접속하고, 페이지 안의 iframe이 처리 서버 화면을 불러옵니다.</p>
-
-        <table>
-            <thead>
-                <tr>
-                    <th>구성</th>
-                    <th>담당 역할</th>
-                    <th>적합한 서비스</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>프론트엔드</td>
-                    <td>브랜드, 설명 글, 광고, 이용 안내, iframe</td>
-                    <td>Vercel + GitHub</td>
-                </tr>
-                <tr>
-                    <td>처리 서버</td>
-                    <td>PDF 업로드, 변환, OCR, 결과 다운로드</td>
-                    <td>Docker가 계속 실행되는 VPS·컨테이너 호스팅</td>
-                </tr>
-                <tr>
-                    <td>도메인·HTTPS</td>
-                    <td>안전한 접속, 브라우저 혼합 콘텐츠 방지</td>
-                    <td>DNS + 리버스 프록시 또는 호스팅 제공 HTTPS</td>
-                </tr>
-            </tbody>
-        </table>
-
-        <h3>왜 iframe을 골랐나</h3>
-        <p class="story-p">REST API로 직접 UI를 만드는 방법도 있지만, 처음부터 파일 업로드·진행 상태·오류 처리·다운로드를 모두 개발해야 합니다. iframe은 Stirling PDF가 이미 제공하는 완성된 화면을 그대로 활용하므로 검증 속도가 빠릅니다. 대신 화면 디자인을 세밀하게 통제하기 어렵고, 프레임 보안 헤더나 쿠키 정책 때문에 막힐 수 있다는 한계가 있습니다.</p>
-
-        <p style="font-weight: 500; color: var(--google-text);">iframe은 무조건 되는 방식이 아닙니다.</p>
-        <p class="story-p">처리 서버가 X-Frame-Options: DENY 또는 SAMEORIGIN을 보내면 다른 출처의 Vercel 페이지 안에서 로드되지 않습니다. 공식 문서도 xFrameOptions가 클릭재킹 방지용이라고 설명합니다. 공개 서비스에서는 보안을 무작정 끄지 말고, 가능하면 같은 출처로 제공하는 리버스 프록시나 허용 출처를 제한하는 구성을 검토해야 합니다.</p>
-
-        <h2>3. 실제 구축 과정: 처음부터 차근차근</h2>
-        <h3>준비물</h3>
-        <ul style="margin-bottom: 20px; color: #3c4043; font-size: 15px;">
-            <li>GitHub 계정과 Vercel 프로젝트</li>
-            <li>Docker 컨테이너를 실행할 서버</li>
-            <li>서버에 연결할 HTTPS 주소</li>
-            <li>터미널 명령을 입력할 수 있는 기본 환경</li>
-        </ul>
-        <p class="story-p">운영용 권장 사양은 기능과 동시 사용자에 따라 달라집니다. 공식 가이드는 기본 배포에 최소 2GB RAM을 안내하고, 성능 최적화 문서는 소규모 팀 기준으로 2코어·4GB RAM·10GB 여유 공간을 권장합니다. OCR과 Office 변환은 특히 메모리와 CPU를 많이 사용합니다.</p>
-
-        <h3>1단계: 로컬에서 먼저 성공시키기</h3>
-        <p class="story-p">처음부터 인터넷 공개 서버에서 작업하면 오류가 Docker 문제인지, 방화벽인지, 도메인인지 구분하기 어렵습니다. 먼저 내 PC에서 공식 이미지를 실행해 정상 화면이 뜨는지 확인합니다.</p>
-        <pre>docker run -d \
-  --name stirling-pdf \
-  -p 8080:8080 \
-  -v ./stirling-data:/configs \
-  docker.stirlingpdf.com/stirlingtools/stirling-pdf:latest</pre>
-        <p class="story-p">컨테이너가 시작되면 브라우저에서 http://localhost:8080을 엽니다. 최신 공식 안내에 따르면 로그인은 기본 활성화되어 있으며 초기 계정은 admin, 암호는 stirling입니다. 첫 접속 즉시 암호를 바꾸고, 이 초기 암호를 유지한 채 인터넷에 공개하지 마세요.</p>
-
-        <h3>2단계: Docker Compose로 운영 설정 만들기</h3>
-        <p class="story-p">테스트는 한 줄 명령으로 충분하지만 운영에서는 설정을 기록하고 다시 실행하기 쉬운 Compose가 편합니다. 아래는 시작용 예시이며, 비밀번호는 저장소에 직접 올리지 말고 호스팅 서비스의 비밀 환경변수로 관리하는 것이 좋습니다.</p>
-        <pre>services:
-  stirling-pdf:
-    image: docker.stirlingpdf.com/stirlingtools/stirling-pdf:latest
-    container_name: stirling-pdf
-    ports:
-      - "8080:8080"
-    volumes:
-      - ./stirling-data/configs:/configs
-      - ./stirling-data/logs:/logs
-      - ./stirling-data/tessdata:/usr/share/tessdata
-    environment:
-      SECURITY_ENABLELOGIN: "true"
-      SYSTEM_DEFAULTLOCALE: "ko-KR"
-    restart: unless-stopped</pre>
-        <ol style="margin-bottom: 20px; color: #3c4043; font-size: 15px; padding-left: 20px;">
-            <li><strong>설정 검사:</strong> docker compose config로 YAML 들여쓰기와 변수 해석을 확인합니다.</li>
-            <li><strong>백그라운드 실행:</strong> docker compose up -d로 시작합니다.</li>
-            <li><strong>로그 확인:</strong> docker compose logs -f stirling-pdf에서 시작 오류를 봅니다.</li>
-            <li><strong>재시작 테스트:</strong> 컨테이너를 다시 시작해도 설정과 계정이 유지되는지 확인합니다.</li>
-        </ol>
-
-        <h3>3단계: 서버에 배포하고 HTTPS 적용</h3>
-        <p class="story-p">서버의 8080 포트를 인터넷에 그대로 노출하기보다, Nginx·Caddy·호스팅 플랫폼의 프록시를 앞에 두고 HTTPS를 적용하는 방식이 일반적입니다. Vercel 페이지가 HTTPS인데 iframe 주소가 HTTP라면 브라우저가 혼합 콘텐츠로 차단합니다.</p>
-        <ul style="margin-bottom: 20px; color: #3c4043; font-size: 15px;">
-            <li>DNS가 올바른 서버 IP 또는 호스팅 주소를 가리키는지 확인</li>
-            <li>HTTPS 인증서가 정상 발급되고 자동 갱신되는지 확인</li>
-            <li>업로드 최대 크기가 프록시와 Stirling PDF 양쪽에서 충분한지 확인</li>
-            <li>/configs가 영구 볼륨에 연결됐는지 확인</li>
-            <li>기본 관리자 암호 변경 및 불필요한 공개 포트 차단</li>
-        </ul>
-
-        <h3>4단계: 업데이트 방법 정하기</h3>
-        <p class="story-p">latest 태그는 편하지만 예상치 못한 변경이 즉시 반영될 수 있습니다. 운영 중에는 검증된 버전을 고정하고, 업데이트 전에 /configs를 백업한 뒤 테스트하는 편이 안전합니다.</p>
-        <pre>docker compose down
-docker compose pull
-docker compose up -d
-docker compose logs --tail=100 stirling-pdf</pre>
-
-        <h2>4. Vercel의 index.html과 연결하기</h2>
-        <p class="story-p">이 파일 맨 아래 스크립트에는 STIRLING_PDF_URL이라는 설정값이 있습니다. 여기에 실제 배포 주소를 넣으면 상단 작업 영역에 iframe이 생성됩니다.</p>
-        <pre>const STIRLING_PDF_URL = "https://별도로-배포한-Stirling-PDF-서버-주소";</pre>
-        <p class="story-p">값을 바꾼 뒤 GitHub에 커밋하고 Vercel이 다시 배포하도록 하면 됩니다. 주소 끝에 특정 기능 경로를 넣을 수 있는지는 설치 버전의 실제 URL을 브라우저에서 먼저 열어 확인하세요. 버전 업데이트로 경로가 바뀔 수 있으므로 추측한 주소를 하드코딩하지 않는 편이 좋습니다.</p>
-
-        <h3>프레임이 차단되면 어떻게 하나</h3>
-        <ol style="margin-bottom: 20px; color: #3c4043; font-size: 15px; padding-left: 20px;">
-            <li>개발자 도구의 Console과 Network에서 X-Frame-Options 또는 CSP frame-ancestors 오류를 찾습니다.</li>
-            <li>Stirling PDF의 공식 보안 설정에서 xFrameOptions 동작을 확인합니다.</li>
-            <li>다른 출처를 무제한 허용하기보다, 동일 출처 리버스 프록시 구성을 우선 검토합니다.</li>
-            <li>당장 해결되지 않으면 이 페이지의 “새 창에서 열기”를 사용해 기능을 제공하고, iframe은 연결이 끝난 뒤 활성화합니다.</li>
-        </ol>
-        <p style="font-weight: 500; color: var(--google-text);">중요한 차이</p>
-        <p class="story-p">CORS는 브라우저 자바스크립트가 다른 서버의 응답을 읽을 수 있는지에 관한 규칙이고, iframe 차단은 주로 X-Frame-Options와 CSP가 결정합니다. “CORS만 허용하면 iframe이 된다”는 설명은 정확하지 않습니다.</p>
-
-        <h2>5. 광고는 어디에, 어떻게 넣는 것이 좋은가</h2>
-        <p class="story-p">이 템플릿에는 상단, 본문 중간, 글 하단의 세 광고 위치가 있습니다. 광고를 변환·다운로드 버튼처럼 보이게 꾸미거나, 사용자가 결과를 받기 위해 광고를 클릭하도록 유도하지 않았습니다. 도구와 광고 사이에 충분한 간격을 두고 “ADVERTISEMENT” 표기도 넣었습니다.</p>
-
-        <table>
-            <thead>
-                <tr>
-                    <th>위치</th>
-                    <th>목적</th>
-                    <th>주의점</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>첫 설명 아래</td>
-                    <td>도구 실행 전 자연스러운 노출</td>
-                    <td>첫 화면을 광고가 과도하게 차지하지 않게 함</td>
-                </tr>
-                <tr>
-                    <td>구축기 중간</td>
-                    <td>콘텐츠를 읽는 방문자 대상</td>
-                    <td>문단 흐름과 충분히 분리</td>
-                </tr>
-                <tr>
-                    <td>FAQ 앞</td>
-                    <td>긴 글을 읽은 방문자 대상</td>
-                    <td>푸터 링크나 버튼과 겹치지 않게 함</td>
-                </tr>
-            </tbody>
-        </table>
-
-        <p style="font-weight: 500; color: var(--google-text);">현재 페이지는 직접 광고 링크 방식입니다.</p>
-        <p class="story-p">상단·중간·하단 광고 박스 전체를 클릭하면 각각 지정한 광고 페이지가 새 창에서 열립니다. 제휴 링크라면 광고주 또는 제휴 프로그램이 요구하는 표시 문구와 운영 정책을 함께 준수하세요.</p>
-        <p class="story-p">현재 페이지에는 아브아르, 나두Ai 등이 각각 독립된 추천 카드로 연결되어 있습니다. 카드 전체가 클릭 영역이며 광고 페이지는 새 창에서 열립니다.</p>
-
-        <h2>6. 제가 막혔던 지점과 해결 방법</h2>
-        <h3>문제 1. Vercel 배포는 성공했는데 PDF 기능이 없다</h3>
-        <p class="story-p"><strong>원인:</strong> 정적 HTML만 배포했고 실제 처리 서버가 없기 때문입니다. <br><strong>해결:</strong> Docker 서버를 별도로 실행하고 그 HTTPS 주소를 연결합니다.</p>
-
-        <h3>문제 2. iframe 영역이 하얗거나 “refused to connect”가 뜬다</h3>
-        <p class="story-p"><strong>원인:</strong> 프레임 보안 헤더, 잘못된 주소, 서버 중단이 대표적입니다. <br><strong>해결:</strong> 주소를 새 탭에서 먼저 열어 서버 생존 여부를 확인하고, 개발자 도구에서 X-Frame-Options와 CSP 오류를 확인합니다.</p>
-
-        <h3>문제 3. HTTPS 페이지에서 HTTP 도구가 안 뜬다</h3>
-        <p class="story-p"><strong>원인:</strong> 브라우저의 Mixed Content 차단입니다. <br><strong>해결:</strong> 처리 서버에도 유효한 HTTPS 인증서를 적용합니다. 브라우저 보안 설정을 낮춰 우회하지 마세요.</p>
-
-        <h3>문제 4. 업로드하다 413 오류가 난다</h3>
-        <p class="story-p"><strong>원인:</strong> 리버스 프록시나 애플리케이션의 업로드 제한보다 파일이 큽니다. <br><strong>해결:</strong> 프록시와 Stirling PDF 설정의 최대 파일 크기를 함께 확인하고, 서버 디스크 여유도 점검합니다.</p>
-
-        <h3>문제 5. OCR이 너무 느리거나 서버가 재시작된다</h3>
-        <p class="story-p"><strong>원인:</strong> OCR은 CPU와 메모리를 많이 쓰며, 저사양 무료 컨테이너에서는 메모리 부족이 나기 쉽습니다. <br><strong>해결:</strong> 동시 작업 수와 파일 크기를 제한하고, 필요한 언어팩만 설치하며, 로그에서 OOM 종료 여부를 확인합니다.</p>
-
-        <h3>문제 6. 한글 OCR 결과가 좋지 않다</h3>
-        <p class="story-p"><strong>원인:</strong> 한국어 Tesseract 학습 데이터가 없거나 원본 해상도가 낮을 수 있습니다. <br><strong>해결:</strong> 한국어 언어팩을 영구 볼륨에 설치하고, 기울기·노이즈를 보정한 300dpi 안팎의 선명한 스캔으로 다시 시험합니다. 표 구조나 수식 인식은 OCR의 범위를 넘어설 수 있습니다.</p>
-
-        <h3>문제 7. 재배포 후 설정과 계정이 사라졌다</h3>
-        <p class="story-p"><strong>원인:</strong> /configs를 임시 파일 시스템에 둔 경우입니다. <br><strong>해결:</strong> 영구 디스크나 볼륨을 마운트하고, 업데이트 전 백업·복구 테스트를 합니다.</p>
-
-        <h3>문제 8. 첫 접속이 매우 느리다</h3>
-        <p class="story-p"><strong>원인:</strong> 무료 또는 절전형 호스팅의 콜드 스타트일 수 있습니다. <br><strong>해결:</strong> “서버를 깨우는 중” 안내를 제공하고, 서비스가 성장하면 상시 실행 인스턴스로 이전합니다. 무료 정책은 자주 바뀌므로 특정 서비스가 영구 무료라고 단정하지 않습니다.</p>
-
-        <h3>문제 9. 설정을 바꿨는데 적용되지 않는다</h3>
-        <p class="story-p"><strong>원인:</strong> 환경변수가 settings.yml보다 우선하기 때문일 수 있습니다. <br><strong>해결:</strong> 공식 설정 우선순위인 환경변수 → 설정 파일/관리자 UI → 기본값 순서를 확인하고 컨테이너 로그를 봅니다.</p>
-
-        <h3>문제 10. 모바일에서 작업창이 너무 작다</h3>
-        <p class="story-p"><strong>원인:</strong> 고정 너비·높이와 양옆 광고 때문입니다. <br><strong>해결:</strong> 이 템플릿처럼 모바일에서 한 열로 바꾸고 iframe을 화면 높이 기준으로 확보합니다. 실제 스마트폰에서 업로드와 다운로드까지 시험해야 합니다.</p>
-
-        <h2>7. 공개하기 전 마지막 체크리스트</h2>
-        <ul style="margin-bottom: 20px; color: #3c4043; font-size: 15px;">
-            <li>기본 관리자 암호를 변경했다.</li>
-            <li>로그인이 필요하다면 계정 생성과 잠금 정책을 설정했다.</li>
-            <li>프론트와 처리 서버 모두 HTTPS로 접속된다.</li>
-            <li>업로드한 문서의 보관·삭제 방식을 개인정보처리방침에 사실대로 적었다.</li>
-            <li>서버 로그에 파일명이나 민감정보가 과도하게 남지 않는지 확인했다.</li>
-            <li>대용량 파일, 손상 파일, 암호화 파일로 실패 동작을 테스트했다.</li>
-            <li>OCR와 Office 변환 중 메모리 사용량을 확인했다.</li>
-            <li>백업과 복구를 실제로 한 번 시험했다.</li>
-            <li>오픈소스 라이선스와 상표·고지 의무를 현재 저장소 기준으로 검토했다.</li>
-            <li>광고가 업로드·변환·다운로드 버튼과 혼동되지 않는다.</li>
-            <li>개인정보처리방침, 이용약관, 문의 방법을 연결했다.</li>
-            <li>장애 시 새 창 열기나 상태 안내 같은 대체 경로가 있다.</li>
-        </ul>
-        
-        <p style="font-weight: 500; color: var(--google-text);">“파일이 절대 외부로 나가지 않는다”라고 쓰지 마세요.</p>
-        <p class="story-p">사용자 PC에서만 실행하는 로컬 설치와 달리, 공개 웹서비스는 파일이 운영자의 처리 서버로 전송됩니다. 전송 암호화, 임시 파일 삭제, 접근 통제, 로그 정책을 실제 구성에 맞게 설명해야 합니다.</p>
-
-        <h2>8. 자주 묻는 질문</h2>
-        <h3>GitHub와 Vercel만으로 무료 운영할 수 있나요?</h3>
-        <p class="story-p">소개 페이지는 가능하지만 전체 Stirling PDF 처리는 어렵습니다. Docker 컨테이너가 지속 실행될 별도 컴퓨팅 환경이 필요합니다. 무료 제공량과 정책은 변할 수 있으므로 현재 조건을 확인하세요.</p>
-
-        <h3>iframe과 API 중 무엇부터 시작할까요?</h3>
-        <p class="story-p">기능 검증이 목적이면 iframe이 빠릅니다. 브랜드 UI, 사용량 제한, 세밀한 광고·회원 구조가 필요해지면 API 기반 커스텀 화면으로 발전시키는 편이 좋습니다.</p>
-
-        <h3>로그인을 꺼도 되나요?</h3>
-        <p class="story-p">공개 도구는 로그인 없이 편리하지만, 자원 남용과 비용 폭증 위험이 커집니다. 공개 범위, 속도 제한, 업로드 크기, 동시 작업 수를 함께 설계해야 합니다.</p>
-
-        <h3>중요 문서도 안전한가요?</h3>
-        <p class="story-p">셀프 호스팅은 통제 범위를 넓혀줄 뿐 자동으로 안전해지는 것은 아닙니다. HTTPS, 접근통제, 업데이트, 임시파일 삭제, 로그, 백업과 운영자 신뢰까지 모두 확인해야 합니다.</p>
-
-        <h3>광고 카드를 클릭하면 바로 해당 페이지로 이동하나요?</h3>
-        <p class="story-p">네. 카드 전체를 클릭하면 선택한 서비스가 새 창에서 열리므로 현재 글을 잃지 않고 둘러볼 수 있습니다.</p>
-
-        <h2>공식 자료</h2>
-        <ul style="margin-bottom: 20px; color: var(--google-blue); font-size: 15px;">
-            <li><a href="https://docs.stirlingpdf.com/Installation/Docker%20Install/" target="_blank">Stirling PDF 공식 Docker 설치 가이드</a></li>
-            <li><a href="https://docs.stirlingpdf.com/Production-Deployment-Guide/" target="_blank">Stirling PDF 공식 운영 배포 가이드</a></li>
-            <li><a href="https://docs.stirlingpdf.com/Configuration/" target="_blank">Stirling PDF 공식 설정 가이드</a></li>
-            <li><a href="https://docs.stirlingpdf.com/Configuration/Security/System%20and%20Security/" target="_blank">Stirling PDF 공식 보안 설정</a></li>
-            <li><a href="https://github.com/Stirling-Tools/Stirling-PDF" target="_blank">Stirling PDF 공식 GitHub 저장소</a></li>
-        </ul>
-        <p style="color: var(--google-gray); font-size: 13px;">기능·배포 환경·광고 정책은 업데이트될 수 있습니다. 실제 운영 시점의 공식 문서를 최종 기준으로 삼으세요.</p>
+    <section class="panel" id="panel-extract">
+      <h2>페이지 추출</h2>
+      <p class="hint">필요한 페이지만 새 PDF로 저장합니다. 예: 1-3, 5, 8-10</p>
+      <div class="dropzone" id="extractDrop" data-input="extractInput">
+        <p>여기에 PDF를 놓거나 클릭해서 선택</p>
+        <span>PDF 1개</span>
+      </div>
+      <input id="extractInput" type="file" accept=".pdf,application/pdf">
+      <div class="file-list" id="extractList"></div>
+      <div class="field">
+        <label for="extractPages">추출할 페이지</label>
+        <input id="extractPages" type="text" placeholder="1-3, 5, 8-10">
+      </div>
+      <button type="button" class="primary" id="extractBtn">추출해서 다운로드</button>
+      <div class="status" id="extractStatus"></div>
     </section>
 
-    <!-- AD 3: 하단 광고 카드 -->
-    <a class="ad-card" href="https://couple-score.vercel.app/" target="_blank" rel="sponsored noopener">
-        <div class="ad-copy">
-            <span class="ad-icon">AI</span>
-            <div class="ad-text">
-                <small class="ad-disclosure">ADVERTISEMENT</small>
-                <strong>그날의 남녀</strong>
-                <p>연인과의 사랑을 기록하세요.</p>
-            </div>
-        </div>
-        <span class="ad-arrow">→</span>
-    </a>
+    <section class="panel" id="panel-rotate">
+      <h2>페이지 회전</h2>
+      <p class="hint">전체 또는 지정한 페이지만 시계 방향으로 회전합니다.</p>
+      <div class="dropzone" id="rotateDrop" data-input="rotateInput">
+        <p>여기에 PDF를 놓거나 클릭해서 선택</p>
+        <span>PDF 1개</span>
+      </div>
+      <input id="rotateInput" type="file" accept=".pdf,application/pdf">
+      <div class="file-list" id="rotateList"></div>
+      <div class="field">
+        <label for="rotateAngle">회전 각도</label>
+        <select id="rotateAngle">
+          <option value="90">90도</option>
+          <option value="180">180도</option>
+          <option value="270">270도</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="rotatePages">대상 페이지 (비우면 전체)</label>
+        <input id="rotatePages" type="text" placeholder="전체, 또는 1-2, 5">
+      </div>
+      <button type="button" class="primary" id="rotateBtn">회전해서 다운로드</button>
+      <div class="status" id="rotateStatus"></div>
+    </section>
 
-    <!-- 푸터 영역 -->
-    <footer style="border-top: 1px solid var(--google-border); padding-top: 24px; margin-top: 32px; color: var(--google-gray); font-size: 13px; text-align: center;">
-        <p>나두 PDF 변환기 · 브라우저 독립형 웹 서비스</p>
-    </footer>
+    <section class="panel" id="panel-images">
+      <h2>이미지 → PDF</h2>
+      <p class="hint">JPG/PNG를 A4 페이지에 맞춰 하나의 PDF로 만듭니다. 순서 변경이 가능합니다.</p>
+      <div class="dropzone" id="imageDrop" data-input="imageInput">
+        <p>여기에 이미지를 놓거나 클릭해서 선택</p>
+        <span>JPG, PNG</span>
+      </div>
+      <input id="imageInput" type="file" accept=".jpg,.jpeg,.png,image/jpeg,image/png" multiple>
+      <div class="file-list" id="imageList"></div>
+      <button type="button" class="primary" id="imageBtn">PDF로 만들기</button>
+      <div class="status" id="imageStatus"></div>
+    </section>
 
-    <!-- 자바스크립트 로직 -->
-    <script>
-        function setupFileInput(inputId, spanId) {
-            const input = document.getElementById(inputId);
-            const span = document.getElementById(spanId);
+    <footer>나두 PDF 변환기 · 개인 PC용 브라우저 도구</footer>
+  </div>
 
-            if (input && span) {
-                input.addEventListener('change', function() {
-                    if (this.files && this.files.length > 0) {
-                        if (this.files.length > 1) {
-                            span.textContent = `${this.files.length}개 파일 선택됨 (${this.files[0].name} 외)`;
-                        } else {
-                            span.textContent = this.files[0].name;
-                        }
-                    } else {
-                        span.textContent = "선택된 파일 없음";
-                    }
-                });
-            }
+  <script>
+    const MAX_FILE = 80 * 1024 * 1024;
+    const MAX_TOTAL = 150 * 1024 * 1024;
+    const A4 = [595.28, 841.89];
+
+    const queues = {
+      merge: [],
+      split: [],
+      extract: [],
+      rotate: [],
+      image: []
+    };
+
+    const busy = {};
+
+    function $(id) {
+      return document.getElementById(id);
+    }
+
+    function formatSize(bytes) {
+      if (bytes < 1024) return bytes + " B";
+      if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + " KB";
+      return (bytes / (1024 * 1024)).toFixed(1) + " MB";
+    }
+
+    function baseName(name) {
+      return name.replace(/\.[^.]+$/, "") || "document";
+    }
+
+    function yieldUI() {
+      return new Promise((resolve) => requestAnimationFrame(() => resolve()));
+    }
+
+    function setStatus(id, type, text) {
+      const el = $(id);
+      el.className = "status " + type;
+      el.textContent = text;
+    }
+
+    function clearStatus(id) {
+      const el = $(id);
+      el.className = "status";
+      el.textContent = "";
+    }
+
+    function isPdf(file) {
+      return file.type === "application/pdf" || /\.pdf$/i.test(file.name);
+    }
+
+    function isImage(file) {
+      return /image\/(jpeg|jpg|png)/i.test(file.type) || /\.(jpe?g|png)$/i.test(file.name);
+    }
+
+    function assertFileSize(file) {
+      if (file.size > MAX_FILE) {
+        throw new Error(file.name + "이(가) 80MB 제한을 초과합니다. (" + formatSize(file.size) + ")");
+      }
+    }
+
+    function assertTotalSize(files) {
+      const total = files.reduce((sum, file) => sum + file.size, 0);
+      if (total > MAX_TOTAL) {
+        throw new Error("선택한 파일 합계가 150MB 제한을 초과합니다. (" + formatSize(total) + ")");
+      }
+    }
+
+    function explainError(error, fileName) {
+      const message = String((error && error.message) || error || "");
+      const prefix = fileName ? fileName + " — " : "";
+      if (/encrypted/i.test(message)) {
+        return prefix + "암호가 걸린 PDF입니다. 암호를 해제한 뒤 다시 시도하세요.";
+      }
+      if (/Failed to parse PDF|No PDF header found|invalid/i.test(message)) {
+        return prefix + "손상됐거나 PDF가 아닌 파일입니다.";
+      }
+      if (/out of memory|allocation failed|Maximum call stack/i.test(message)) {
+        return "메모리가 부족합니다. 파일 크기를 줄이거나 페이지 수가 적은 파일로 나눠 주세요.";
+      }
+      return prefix + (message || "처리 중 오류가 발생했습니다.");
+    }
+
+    async function loadPdf(file) {
+      assertFileSize(file);
+      if (!isPdf(file)) throw new Error(file.name + "은(는) PDF가 아닙니다.");
+      const bytes = await file.arrayBuffer();
+      try {
+        return await PDFLib.PDFDocument.load(bytes);
+      } catch (error) {
+        throw new Error(explainError(error, file.name));
+      }
+    }
+
+    function parsePageRanges(text, pageCount) {
+      const raw = String(text || "").trim();
+      if (!raw) throw new Error("추출할 페이지를 입력하세요. 예: 1-3, 5");
+      const pages = new Set();
+      const parts = raw.split(/[,，]+/).map((part) => part.trim()).filter(Boolean);
+      for (const part of parts) {
+        const match = part.match(/^(\d+)\s*[-~–]\s*(\d+)$/) || part.match(/^(\d+)$/);
+        if (!match) throw new Error("페이지 형식을 확인할 수 없습니다: " + part);
+        let start = Number(match[1]);
+        let end = match[2] ? Number(match[2]) : start;
+        if (start > end) {
+          const swap = start;
+          start = end;
+          end = swap;
+        }
+        if (start < 1 || end > pageCount) {
+          throw new Error("페이지는 1부터 " + pageCount + "까지입니다.");
+        }
+        for (let i = start; i <= end; i += 1) pages.add(i - 1);
+      }
+      return Array.from(pages).sort((a, b) => a - b);
+    }
+
+    function downloadBlob(blob, filename) {
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = filename;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 1500);
+    }
+
+    function downloadBytes(bytes, filename, type) {
+      downloadBlob(new Blob([bytes], { type: type }), filename);
+    }
+
+    function renderList(tool, options) {
+      const list = $(tool + "List");
+      const files = queues[tool];
+      list.replaceChildren();
+      files.forEach((file, index) => {
+        const row = document.createElement("div");
+        row.className = "file-row";
+
+        const meta = document.createElement("div");
+        meta.className = "file-meta";
+        const name = document.createElement("strong");
+        name.textContent = (options && options.numbered ? (index + 1) + ". " : "") + file.name;
+        const size = document.createElement("small");
+        size.textContent = formatSize(file.size);
+        meta.append(name, size);
+
+        const actions = document.createElement("div");
+        actions.className = "row-actions";
+
+        if (options && options.reorder) {
+          const up = document.createElement("button");
+          up.type = "button";
+          up.textContent = "위로";
+          up.disabled = index === 0;
+          up.addEventListener("click", () => moveFile(tool, index, -1, options));
+
+          const down = document.createElement("button");
+          down.type = "button";
+          down.textContent = "아래로";
+          down.disabled = index === files.length - 1;
+          down.addEventListener("click", () => moveFile(tool, index, 1, options));
+          actions.append(up, down);
         }
 
-        window.addEventListener('DOMContentLoaded', () => {
-            setupFileInput('mergeFile', 'mergeFileName');
-            setupFileInput('splitFile', 'splitFileName');
+        const remove = document.createElement("button");
+        remove.type = "button";
+        remove.textContent = "삭제";
+        remove.addEventListener("click", () => {
+          queues[tool].splice(index, 1);
+          renderList(tool, options);
         });
+        actions.append(remove);
 
-        // 1. PDF 합치기 (완료 시점에만 메시지 출력)
-        async function handleMerge() {
-            const fileInput = document.getElementById('mergeFile');
-            if (!fileInput.files || fileInput.files.length < 2) {
-                alert("합치기 위해 2개 이상의 PDF 파일을 선택해주세요.");
-                return;
-            }
+        row.append(meta, actions);
+        list.append(row);
+      });
+    }
 
-            try {
-                const mergedPdf = await PDFLib.PDFDocument.create();
+    function moveFile(tool, index, direction, options) {
+      const files = queues[tool];
+      const next = index + direction;
+      if (next < 0 || next >= files.length) return;
+      const item = files[index];
+      files[index] = files[next];
+      files[next] = item;
+      renderList(tool, options);
+    }
 
-                for (let file of fileInput.files) {
-                    const arrayBuffer = await file.arrayBuffer();
-                    const pdf = await PDFLib.PDFDocument.load(arrayBuffer);
-                    const copiedPages = await mergedPdf.copyPages(pdf, pdf.getPageIndices());
-                    copiedPages.forEach((page) => mergedPdf.addPage(page));
-                }
-
-                const mergedPdfFileBytes = await mergedPdf.save();
-                downloadFile(mergedPdfFileBytes, "merged_document.pdf", "application/pdf");
-                
-                // 완료 메시지
-                alert("PDF 합치기가 완료되어 파일이 다운로드되었습니다!");
-            } catch (error) {
-                console.error(error);
-                alert("PDF 합치기 중 오류가 발생했습니다.");
-            }
+    function addFiles(tool, fileList, accept, options) {
+      const incoming = Array.from(fileList || []);
+      if (!incoming.length) return;
+      const rejected = [];
+      incoming.forEach((file) => {
+        try {
+          if (accept === "pdf" && !isPdf(file)) throw new Error("PDF만 추가할 수 있습니다.");
+          if (accept === "image" && !isImage(file)) throw new Error("JPG 또는 PNG만 추가할 수 있습니다.");
+          assertFileSize(file);
+          if (options && options.single) queues[tool] = [file];
+          else queues[tool].push(file);
+        } catch (error) {
+          rejected.push(error.message);
         }
+      });
+      renderList(tool, options);
+      const statusId = tool + "Status";
+      if (rejected.length) setStatus(statusId, "err", rejected.join(" "));
+      else clearStatus(statusId);
+    }
 
-        // 2. PDF 나누기 (완료 시점에만 메시지 출력)
-        async function handleSplit() {
-            const fileInput = document.getElementById('splitFile');
-            if (!fileInput.files || fileInput.files.length === 0) {
-                alert("나눌 PDF 파일을 선택해주세요.");
-                return;
-            }
+    function bindDropzone(dropId, inputId, tool, accept, options) {
+      const drop = $(dropId);
+      const input = $(inputId);
+      drop.addEventListener("click", () => input.click());
+      drop.addEventListener("dragover", (event) => {
+        event.preventDefault();
+        drop.classList.add("dragover");
+      });
+      drop.addEventListener("dragleave", () => drop.classList.remove("dragover"));
+      drop.addEventListener("drop", (event) => {
+        event.preventDefault();
+        drop.classList.remove("dragover");
+        addFiles(tool, event.dataTransfer.files, accept, options);
+      });
+      input.addEventListener("change", () => {
+        addFiles(tool, input.files, accept, options);
+        input.value = "";
+      });
+    }
 
-            try {
-                const file = fileInput.files[0];
-                const arrayBuffer = await file.arrayBuffer();
-                const pdf = await PDFLib.PDFDocument.load(arrayBuffer);
-                const totalPages = pdf.getPageCount();
+    async function withBusy(tool, button, work) {
+      if (busy[tool]) return;
+      busy[tool] = true;
+      button.disabled = true;
+      try {
+        await work();
+      } finally {
+        busy[tool] = false;
+        button.disabled = false;
+      }
+    }
 
-                // 각 페이지별로 루프를 돌며 개별 PDF 생성 후 다운로드
-                for (let i = 0; i < totalPages; i++) {
-                    const subPdf = await PDFLib.PDFDocument.create();
-                    const [copiedPage] = await subPdf.copyPages(pdf, [i]);
-                    subPdf.addPage(copiedPage);
-
-                    const pdfBytes = await subPdf.save();
-                    downloadFile(pdfBytes, `split_page_${i + 1}.pdf`, "application/pdf");
-                }
-
-                // 완료 메시지
-                alert(`총 ${totalPages}개 페이지로 분할이 완료되어 다운로드가 시작되었습니다!`);
-            } catch (error) {
-                console.error(error);
-                alert("PDF 나누기 중 오류가 발생했습니다.");
-            }
+    async function handleMerge() {
+      const files = queues.merge;
+      const statusId = "mergeStatus";
+      if (files.length < 2) {
+        setStatus(statusId, "err", "합치려면 PDF를 2개 이상 선택하세요.");
+        return;
+      }
+      try {
+        assertTotalSize(files);
+        const merged = await PDFLib.PDFDocument.create();
+        for (let i = 0; i < files.length; i += 1) {
+          setStatus(statusId, "info", (i + 1) + "/" + files.length + " 파일 합치는 중 — " + files[i].name);
+          await yieldUI();
+          const pdf = await loadPdf(files[i]);
+          const pages = await merged.copyPages(pdf, pdf.getPageIndices());
+          pages.forEach((page) => merged.addPage(page));
         }
+        setStatus(statusId, "info", "파일 저장 중...");
+        await yieldUI();
+        const bytes = await merged.save();
+        downloadBytes(bytes, "merged.pdf", "application/pdf");
+        setStatus(statusId, "ok", files.length + "개 파일을 합쳐 merged.pdf로 저장했습니다.");
+      } catch (error) {
+        console.error(error);
+        setStatus(statusId, "err", explainError(error));
+      }
+    }
 
-        // 파일 다운로드 헬퍼 함수
-        function downloadFile(bytes, filename, mimeType) {
-            const blob = new Blob([bytes], { type: mimeType });
-            const link = document.createElement('a');
-            link.href = URL.createObjectURL(blob);
-            link.download = filename;
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
+    async function handleSplit() {
+      const file = queues.split[0];
+      const statusId = "splitStatus";
+      if (!file) {
+        setStatus(statusId, "err", "나눌 PDF를 선택하세요.");
+        return;
+      }
+      try {
+        setStatus(statusId, "info", "PDF를 읽는 중...");
+        await yieldUI();
+        const pdf = await loadPdf(file);
+        const total = pdf.getPageCount();
+        if (total < 1) throw new Error("페이지가 없는 PDF입니다.");
+        const zip = new JSZip();
+        for (let i = 0; i < total; i += 1) {
+          setStatus(statusId, "info", (i + 1) + "/" + total + "페이지를 ZIP에 넣는 중");
+          await yieldUI();
+          const part = await PDFLib.PDFDocument.create();
+          const [page] = await part.copyPages(pdf, [i]);
+          part.addPage(page);
+          const bytes = await part.save();
+          const name = "page_" + String(i + 1).padStart(3, "0") + ".pdf";
+          zip.file(name, bytes, { compression: "STORE" });
         }
-    </script>
+        setStatus(statusId, "info", "ZIP 만드는 중...");
+        await yieldUI();
+        const blob = await zip.generateAsync({ type: "blob" });
+        downloadBlob(blob, baseName(file.name) + "_pages.zip");
+        setStatus(statusId, "ok", total + "페이지를 ZIP 한 개로 저장했습니다.");
+      } catch (error) {
+        console.error(error);
+        setStatus(statusId, "err", explainError(error));
+      }
+    }
+
+    async function handleExtract() {
+      const file = queues.extract[0];
+      const statusId = "extractStatus";
+      if (!file) {
+        setStatus(statusId, "err", "추출할 PDF를 선택하세요.");
+        return;
+      }
+      try {
+        setStatus(statusId, "info", "PDF를 읽는 중...");
+        await yieldUI();
+        const pdf = await loadPdf(file);
+        const indices = parsePageRanges($("extractPages").value, pdf.getPageCount());
+        setStatus(statusId, "info", indices.length + "페이지 추출 중...");
+        await yieldUI();
+        const out = await PDFLib.PDFDocument.create();
+        const pages = await out.copyPages(pdf, indices);
+        pages.forEach((page) => out.addPage(page));
+        const bytes = await out.save();
+        downloadBytes(bytes, baseName(file.name) + "_extracted.pdf", "application/pdf");
+        setStatus(statusId, "ok", indices.length + "페이지를 추출했습니다.");
+      } catch (error) {
+        console.error(error);
+        setStatus(statusId, "err", explainError(error));
+      }
+    }
+
+    async function handleRotate() {
+      const file = queues.rotate[0];
+      const statusId = "rotateStatus";
+      if (!file) {
+        setStatus(statusId, "err", "회전할 PDF를 선택하세요.");
+        return;
+      }
+      try {
+        const extra = Number($("rotateAngle").value);
+        setStatus(statusId, "info", "PDF를 읽는 중...");
+        await yieldUI();
+        const pdf = await loadPdf(file);
+        const rangeText = $("rotatePages").value.trim();
+        const targets = rangeText
+          ? parsePageRanges(rangeText, pdf.getPageCount())
+          : pdf.getPageIndices();
+        targets.forEach((index) => {
+          const page = pdf.getPage(index);
+          const current = page.getRotation().angle || 0;
+          page.setRotation(PDFLib.degrees((current + extra) % 360));
+        });
+        setStatus(statusId, "info", "파일 저장 중...");
+        await yieldUI();
+        const bytes = await pdf.save();
+        downloadBytes(bytes, baseName(file.name) + "_rotated.pdf", "application/pdf");
+        setStatus(statusId, "ok", targets.length + "페이지를 " + extra + "도 회전했습니다.");
+      } catch (error) {
+        console.error(error);
+        setStatus(statusId, "err", explainError(error));
+      }
+    }
+
+    async function embedImage(pdf, file) {
+      const bytes = await file.arrayBuffer();
+      const name = file.name.toLowerCase();
+      const tryPng = name.endsWith(".png") || file.type === "image/png";
+      try {
+        return tryPng ? await pdf.embedPng(bytes) : await pdf.embedJpg(bytes);
+      } catch (first) {
+        try {
+          return tryPng ? await pdf.embedJpg(bytes) : await pdf.embedPng(bytes);
+        } catch (second) {
+          throw new Error(file.name + "은(는) JPG 또는 PNG로 열 수 없습니다.");
+        }
+      }
+    }
+
+    async function handleImages() {
+      const files = queues.image;
+      const statusId = "imageStatus";
+      if (!files.length) {
+        setStatus(statusId, "err", "이미지를 1개 이상 선택하세요.");
+        return;
+      }
+      try {
+        assertTotalSize(files);
+        const pdf = await PDFLib.PDFDocument.create();
+        for (let i = 0; i < files.length; i += 1) {
+          setStatus(statusId, "info", (i + 1) + "/" + files.length + " 이미지 넣는 중 — " + files[i].name);
+          await yieldUI();
+          assertFileSize(files[i]);
+          if (!isImage(files[i])) throw new Error(files[i].name + "은(는) JPG 또는 PNG가 아닙니다.");
+          const image = await embedImage(pdf, files[i]);
+          const page = pdf.addPage(A4);
+          const margin = 36;
+          const fitted = image.scaleToFit(A4[0] - margin * 2, A4[1] - margin * 2);
+          page.drawImage(image, {
+            x: (A4[0] - fitted.width) / 2,
+            y: (A4[1] - fitted.height) / 2,
+            width: fitted.width,
+            height: fitted.height
+          });
+        }
+        setStatus(statusId, "info", "파일 저장 중...");
+        await yieldUI();
+        const bytes = await pdf.save();
+        downloadBytes(bytes, "images.pdf", "application/pdf");
+        setStatus(statusId, "ok", files.length + "장 이미지로 images.pdf를 만들었습니다.");
+      } catch (error) {
+        console.error(error);
+        setStatus(statusId, "err", explainError(error));
+      }
+    }
+
+    document.querySelectorAll(".tabs button").forEach((button) => {
+      button.addEventListener("click", () => {
+        document.querySelectorAll(".tabs button").forEach((item) => item.classList.remove("active"));
+        document.querySelectorAll(".panel").forEach((panel) => panel.classList.remove("active"));
+        button.classList.add("active");
+        $("panel-" + button.dataset.tool).classList.add("active");
+      });
+    });
+
+    bindDropzone("mergeDrop", "mergeInput", "merge", "pdf", { reorder: true, numbered: true });
+    bindDropzone("splitDrop", "splitInput", "split", "pdf", { single: true });
+    bindDropzone("extractDrop", "extractInput", "extract", "pdf", { single: true });
+    bindDropzone("rotateDrop", "rotateInput", "rotate", "pdf", { single: true });
+    bindDropzone("imageDrop", "imageInput", "image", "image", { reorder: true, numbered: true });
+
+    $("mergeBtn").addEventListener("click", () => withBusy("merge", $("mergeBtn"), handleMerge));
+    $("splitBtn").addEventListener("click", () => withBusy("split", $("splitBtn"), handleSplit));
+    $("extractBtn").addEventListener("click", () => withBusy("extract", $("extractBtn"), handleExtract));
+    $("rotateBtn").addEventListener("click", () => withBusy("rotate", $("rotateBtn"), handleRotate));
+    $("imageBtn").addEventListener("click", () => withBusy("image", $("imageBtn"), handleImages));
+  </script>
 </body>
 </html>
