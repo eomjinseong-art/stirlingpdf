@@ -3,7 +3,6 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="robots" content="noindex, nofollow">
   <title>나두 PDF 변환기</title>
   <script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
@@ -32,8 +31,68 @@
     }
     .wrap { max-width: 760px; margin: 0 auto; padding: 28px 20px 48px; }
     header { margin-bottom: 20px; }
+    .header-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
     h1 { font-size: 26px; font-weight: 700; margin: 0 0 6px; }
     .sub { margin: 0; color: var(--gray); font-size: 14px; }
+    #visitor-counter {
+      display: none;
+      flex: none;
+      margin-top: 6px;
+      font-size: 11px;
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+      color: #9aa0a6;
+      letter-spacing: 0;
+    }
+    #visitor-counter.is-visible { display: inline-block; }
+    .highlight {
+      margin-top: 14px;
+      padding: 14px 16px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #e8f0fe 0%, #e6f4ea 100%);
+      border: 1px solid #aecbfa;
+    }
+    .highlight strong {
+      display: block;
+      font-size: 18px;
+      font-weight: 800;
+      color: #0b57d0;
+      letter-spacing: -0.3px;
+    }
+    .highlight span {
+      display: block;
+      margin-top: 4px;
+      font-size: 13px;
+      color: #137333;
+      font-weight: 700;
+    }
+    .ad-section { margin-top: 28px; }
+    .ad-section h2 { font-size: 14px; color: var(--gray); border: 0; margin: 0 0 10px; }
+    .ad-card {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 14px 16px;
+      margin-bottom: 8px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: inherit;
+      text-decoration: none;
+    }
+    .ad-card:hover { border-color: var(--blue); }
+    .ad-card small {
+      display: block;
+      font-size: 9px;
+      letter-spacing: 1px;
+      color: #9aa0a6;
+      text-transform: uppercase;
+      margin-bottom: 2px;
+    }
+    .ad-card strong { display: block; font-size: 14px; }
+    .ad-card p { margin: 2px 0 0; font-size: 12px; color: var(--gray); }
+    .ad-card em { color: var(--blue); font-style: normal; font-weight: 700; font-size: 13px; }
     .tabs {
       display: flex;
       flex-wrap: wrap;
@@ -153,8 +212,17 @@
 <body>
   <div class="wrap">
     <header>
-      <h1>나두 PDF 변환기</h1>
-      <p class="sub">이 PC 브라우저에서만 처리합니다. 파일은 서버로 전송되지 않습니다. 파일당 80MB, 합치기 합계 150MB까지.</p>
+      <div class="header-row">
+        <div>
+          <h1>나두 PDF 변환기</h1>
+          <p class="sub">파일은 서버로 전송되지 않고, 이 브라우저 안에서만 처리됩니다. 파일당 80MB, 합치기 합계 150MB까지.</p>
+        </div>
+        <span id="visitor-counter" aria-label="누적 방문자">-</span>
+      </div>
+      <div class="highlight">
+        <strong>회원가입 없음 · 완전 무료</strong>
+        <span>로그인 없이 바로 쓰고, 비용도 없습니다.</span>
+      </div>
     </header>
 
     <nav class="tabs" aria-label="도구 선택">
@@ -246,7 +314,50 @@
       <div class="status" id="imageStatus"></div>
     </section>
 
-    <footer>나두 PDF 변환기 · 개인 PC용 브라우저 도구</footer>
+    <section class="ad-section" aria-label="추천 사이트">
+      <h2>ADVERTISEMENT</h2>
+      <a class="ad-card" href="https://ai-tools-site-tqbh.vercel.app/" target="_blank" rel="noopener noreferrer">
+        <div>
+          <small>Advertisement</small>
+          <strong>나두Ai</strong>
+          <p>오늘의 AI 나도 써본다! 최신 AI 툴 모음</p>
+        </div>
+        <em>바로가기 →</em>
+      </a>
+      <a class="ad-card" href="https://couple-score.vercel.app/" target="_blank" rel="noopener noreferrer">
+        <div>
+          <small>Advertisement</small>
+          <strong>그날의 남녀</strong>
+          <p>연인과의 사랑을 기록하세요.</p>
+        </div>
+        <em>바로가기 →</em>
+      </a>
+      <a class="ad-card" href="https://a-couple-score-cpang.vercel.app/" target="_blank" rel="noopener noreferrer">
+        <div>
+          <small>Advertisement</small>
+          <strong>그날의 남녀 마켓</strong>
+          <p>커플템·데이트 아이템 보러가기</p>
+        </div>
+        <em>바로가기 →</em>
+      </a>
+      <a class="ad-card" href="https://b-cat-cpang.vercel.app/" target="_blank" rel="noopener noreferrer">
+        <div>
+          <small>Advertisement</small>
+          <strong>숨숨마을</strong>
+          <p>우리 집 고양이용품은 숨숨마을</p>
+        </div>
+        <em>바로가기 →</em>
+      </a>
+      <a class="ad-card" href="https://avoir24.com/" target="_blank" rel="noopener noreferrer">
+        <div>
+          <small>Advertisement</small>
+          <strong>아브아르</strong>
+          <p>트렌디한 감성의 여성의류 쇼핑몰</p>
+        </div>
+        <em>바로가기 →</em>
+      </a>
+    </section>
+    <footer>나두 PDF 변환기 · 회원가입 없이 무료로 쓰는 브라우저 도구</footer>
   </div>
 
   <script>
@@ -683,6 +794,43 @@
     $("extractBtn").addEventListener("click", () => withBusy("extract", $("extractBtn"), handleExtract));
     $("rotateBtn").addEventListener("click", () => withBusy("rotate", $("rotateBtn"), handleRotate));
     $("imageBtn").addEventListener("click", () => withBusy("image", $("imageBtn"), handleImages));
+
+    const VISITOR_COUNTER_NS = "nadu-pdf";
+    const VISITOR_COUNTER_KEY = "visits";
+    const VISITOR_COUNTER_BASE = "https://abacus.jasoncameron.dev";
+    const VISITOR_VISITED_STORAGE_KEY = "nadu_pdf_visit_marked_v1";
+
+    function renderVisitorCount(value) {
+      const box = $("visitor-counter");
+      if (!box) return;
+      const n = parseInt(value, 10);
+      if (!isFinite(n) || n <= 0) {
+        box.classList.remove("is-visible");
+        return;
+      }
+      box.textContent = n.toLocaleString("ko-KR");
+      box.setAttribute("aria-label", "누적 방문자 " + n.toLocaleString("ko-KR"));
+      box.classList.add("is-visible");
+    }
+
+    function initVisitorCounter() {
+      let alreadyCountedToday = false;
+      try {
+        const today = new Date().toISOString().slice(0, 10);
+        alreadyCountedToday = localStorage.getItem(VISITOR_VISITED_STORAGE_KEY) === today;
+        if (!alreadyCountedToday) localStorage.setItem(VISITOR_VISITED_STORAGE_KEY, today);
+      } catch (_) { /* 저장 불가 환경에서는 매번 증가 */ }
+
+      const path = alreadyCountedToday ? "/get/" : "/hit/";
+      fetch(VISITOR_COUNTER_BASE + path + VISITOR_COUNTER_NS + "/" + VISITOR_COUNTER_KEY, { cache: "no-store" })
+        .then(function (res) { return res.ok ? res.json() : null; })
+        .then(function (data) {
+          if (data && typeof data.value !== "undefined") renderVisitorCount(data.value);
+        })
+        .catch(function () { /* 실패 시 숫자 미표시 */ });
+    }
+
+    try { initVisitorCounter(); } catch (e) { /* no-op */ }
   </script>
 </body>
 </html>
