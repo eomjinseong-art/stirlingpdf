@@ -217,7 +217,7 @@
           <h1>나두 PDF 변환기</h1>
           <p class="sub">파일은 서버로 전송되지 않고, 이 브라우저 안에서만 처리됩니다. 파일당 80MB, 합치기 합계 150MB까지.</p>
         </div>
-        <span id="visitor-counter" aria-label="누적 방문자">-</span>
+        <span id="visitor-counter"></span>
       </div>
       <div class="highlight">
         <strong>회원가입 없음 · 완전 무료</strong>
@@ -808,8 +808,7 @@
         box.classList.remove("is-visible");
         return;
       }
-      box.textContent = n.toLocaleString("ko-KR");
-      box.setAttribute("aria-label", "누적 방문자 " + n.toLocaleString("ko-KR"));
+      box.textContent = "👁 " + n.toLocaleString("ko-KR");
       box.classList.add("is-visible");
     }
 
