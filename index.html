@@ -207,6 +207,14 @@
     .status.err { display: block; background: var(--err-bg); color: var(--err); }
     footer { margin-top: 24px; color: var(--gray); font-size: 12px; text-align: center; }
     input[type="file"] { display: none; }
+        /* Coupang Partners footer banner (광고) */
+        .cpb { max-width: 100%; margin: 24px auto 0; padding: 0; text-align: left; }
+        .cpb-link { display: flex; align-items: center; gap: 10px; padding: 12px 16px; border: 1px solid var(--border); border-radius: 8px; background: var(--card); color: var(--text); font-size: 14px; line-height: 1.5; text-decoration: none; word-break: keep-all; transition: border-color .15s ease, color .15s ease; }
+        .cpb-link:hover, .cpb-link:focus-visible { border-color: var(--blue); color: var(--blue); text-decoration: none; }
+        .cpb-label { flex-shrink: 0; padding: 1px 6px; border: 1px solid var(--border); border-radius: 4px; color: var(--gray); font-size: 11px; line-height: 1.5; }
+        .cpb-copy { flex: 1; min-width: 0; }
+        .cpb-arrow { flex-shrink: 0; color: var(--blue); }
+        .cpb-note { margin: 8px 0 0; color: var(--gray); font-size: 11px; line-height: 1.6; text-align: center; word-break: keep-all; }
   </style>
 </head>
 <body>
@@ -357,6 +365,14 @@
         <em>바로가기 →</em>
       </a>
     </section>
+    <aside class="cpb" aria-label="광고">
+      <a class="cpb-link" href="https://link.coupang.com/a/hsdzLh1vB6" target="_blank" rel="sponsored noopener noreferrer nofollow">
+        <span class="cpb-label">광고</span>
+        <span class="cpb-copy">PDF는 여기서 합치고 나누고, 장바구니는 쿠팡에서 채워 보세요</span>
+        <span class="cpb-arrow" aria-hidden="true">→</span>
+      </a>
+      <p class="cpb-note">이 게시물은 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다.</p>
+    </aside>
     <footer>나두 PDF 변환기 · 회원가입 없이 무료로 쓰는 브라우저 도구</footer>
   </div>
 
